@@ -38,6 +38,7 @@ export function App() {
             </span>
             <span className="nav-links">
               <a href="#buttons">Buttons</a>
+              <a href="#styles">Styles</a>
               <a href="#cards">Cards</a>
               <a href="#lab">Lab</a>
               <a href="https://github.com/seangeng/argent">GitHub</a>
@@ -124,6 +125,44 @@ import "argentui/styles.css";
 
 // full chrome
 <MetalButton tone="silver" variant="fill">Fill</MetalButton>`}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Border styles */}
+      <section id="styles">
+        <div className="wrap">
+          <p className="eyebrow">Variants</p>
+          <h2>Border styles</h2>
+          <p>
+            Mix <code style={{ fontFamily: "var(--mono)", fontSize: 14 }}>frame</code> and{" "}
+            <code style={{ fontFamily: "var(--mono)", fontSize: 14 }}>tint</code> for different
+            framings — a single rim, a double frame with an inner hairline, or a tinted interior
+            where the metal shows faintly through.
+          </p>
+          <div className="stage" style={{ gap: 18 }}>
+            {[
+              { label: "Single", props: {} },
+              { label: "Double", props: { frame: "double" as const } },
+              { label: "Tinted", props: { tint: true } },
+              { label: "Double + tint", props: { frame: "double" as const, tint: true } },
+              { label: "Thick rim", props: { borderWidth: 4 } },
+            ].map((v) => (
+              <MetalCard key={v.label} tone="silver" radius={16} style={{ width: 150 }} {...v.props}>
+                <div style={{ padding: "26px 10px", textAlign: "center", fontWeight: 640, fontSize: 14 }}>
+                  {v.label}
+                </div>
+              </MetalCard>
+            ))}
+          </div>
+          <div style={{ marginTop: 16 }}>
+            <CodeBlock
+              code={`<MetalCard tone="silver" />                       // single
+<MetalCard tone="silver" frame="double" />        // double frame
+<MetalCard tone="silver" tint />                  // metal shows through
+<MetalCard tone="silver" frame="double" tint />   // both
+<MetalCard tone="silver" borderWidth={4} />       // thick rim`}
             />
           </div>
         </div>

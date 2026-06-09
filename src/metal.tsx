@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LiquidMetal, type LiquidMetalParams } from "@paper-design/shaders-react";
 
 /**
@@ -44,6 +44,23 @@ export function useMounted(): boolean {
   return m;
 }
 
+/**
+ * Reports whether `ref` is on/near screen. Each metal surface is a WebGL
+ * canvas, and browsers cap concurrent contexts (~16) — so we only mount the
+ * shader while it's visible and release the context when it scrolls away.
+ */
+function useInView(ref: React.RefObject<Element | null>, margin = "250px"): boolean {
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { rootMargin: margin });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [ref, margin]);
+  return inView;
+}
+
 export interface MetalFillProps {
   tone: MetalTone;
   /** Shader animation speed (0 pauses). */
@@ -52,17 +69,23 @@ export interface MetalFillProps {
   scale?: number;
 }
 
-/** The shader canvas, absolutely filling its positioned parent. */
+/** The shader canvas, absolutely filling its positioned parent (when in view). */
 export function MetalFill({ tone, speed = 1, scale = 1.1 }: MetalFillProps) {
-  if (!useMounted()) return null;
+  const ref = useRef<HTMLSpanElement>(null);
+  const mounted = useMounted();
+  const inView = useInView(ref);
   return (
-    <LiquidMetal
-      shape="none"
-      fit="cover"
-      scale={scale}
-      speed={speed}
-      {...TONE_PARAMS[tone]}
-      style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
-    />
+    <span ref={ref} aria-hidden="true" style={{ position: "absolute", inset: 0 }}>
+      {mounted && inView && (
+        <LiquidMetal
+          shape="none"
+          fit="cover"
+          scale={scale}
+          speed={speed}
+          {...TONE_PARAMS[tone]}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+        />
+      )}
+    </span>
   );
 }

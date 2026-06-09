@@ -1,13 +1,16 @@
 import { useState } from "react";
-import { Metal, type MetalTone, type MetalVariant } from "argentui";
+import { Metal, type MetalTone, type MetalVariant, type MetalFrame } from "argentui";
 import { CodeBlock } from "./CodeBlock";
 
 const TONES: MetalTone[] = ["silver", "gold", "gunmetal", "obsidian"];
 const VARIANTS: MetalVariant[] = ["border", "fill"];
+const FRAMES: MetalFrame[] = ["single", "double"];
 
 export function MetalLab() {
   const [tone, setTone] = useState<MetalTone>("silver");
   const [variant, setVariant] = useState<MetalVariant>("border");
+  const [frame, setFrame] = useState<MetalFrame>("single");
+  const [tint, setTint] = useState(false);
   const [reveal, setReveal] = useState(true);
   const [radius, setRadius] = useState(20);
   const [speed, setSpeed] = useState(1);
@@ -17,7 +20,7 @@ export function MetalLab() {
   const showReveal = variant === "border";
   const code = `<Metal
   tone="${tone}"
-  variant="${variant}"${showReveal && reveal ? "\n  revealOnHover" : ""}
+  variant="${variant}"${variant === "border" && frame === "double" ? `\n  frame="double"` : ""}${variant === "border" && tint ? "\n  tint" : ""}${showReveal && reveal ? "\n  revealOnHover" : ""}
   radius={${radius}}
   speed={${speed}}
   metalScale={${metalScale}}${sheen ? "\n  sheen" : ""}
@@ -48,6 +51,27 @@ export function MetalLab() {
             ))}
           </div>
         </div>
+        {showReveal && (
+          <div className="ctl">
+            <label>Frame</label>
+            <div className="seg">
+              {FRAMES.map((f) => (
+                <button key={f} data-on={frame === f} onClick={() => setFrame(f)}>
+                  {f}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        {showReveal && (
+          <div className="ctl">
+            <label>Tint inside</label>
+            <div className="seg">
+              <button data-on={tint} onClick={() => setTint(true)}>on</button>
+              <button data-on={!tint} onClick={() => setTint(false)}>off</button>
+            </div>
+          </div>
+        )}
         {showReveal && (
           <div className="ctl">
             <label>Fill on hover</label>
@@ -86,7 +110,7 @@ export function MetalLab() {
 
       <div>
         <div className="stage lab-stage">
-          <Metal tone={tone} variant={variant} revealOnHover={showReveal && reveal} radius={radius} speed={speed} metalScale={metalScale} sheen={sheen}>
+          <Metal tone={tone} variant={variant} frame={frame} tint={tint} revealOnHover={showReveal && reveal} radius={radius} speed={speed} metalScale={metalScale} sheen={sheen}>
             <div style={{ padding: 40, fontSize: 24, fontWeight: 700, letterSpacing: "-0.03em", minWidth: 220, textAlign: "center" }}>
               Argent
             </div>

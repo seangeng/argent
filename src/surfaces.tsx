@@ -13,6 +13,9 @@ function assignRef<T>(ref: React.ForwardedRef<T>, node: T | null) {
 /** Where the liquid metal shows: just the edge, or the whole surface. */
 export type MetalVariant = "border" | "fill";
 
+/** Border framing: a single rim, or a rim plus an inner hairline frame. */
+export type MetalFrame = "single" | "double";
+
 type StyleVars = React.CSSProperties & Record<`--${string}`, string>;
 
 export interface MetalProps extends React.HTMLAttributes<HTMLElement> {
@@ -22,6 +25,10 @@ export interface MetalProps extends React.HTMLAttributes<HTMLElement> {
   tone?: MetalTone;
   /** `"border"` (metal edge only, default) or `"fill"` (metal fills the surface). */
   variant?: MetalVariant;
+  /** `"single"` rim (default) or `"double"` — rim plus an inner hairline frame. */
+  frame?: MetalFrame;
+  /** Let the metal show faintly through the interior panel (border variant). */
+  tint?: boolean;
   /** Border thickness in px (border variant). */
   borderWidth?: number;
   /** Fill the whole surface with metal on hover (border variant). */
@@ -50,6 +57,8 @@ export const Metal = forwardRef<HTMLElement, MetalProps>(function Metal(
     as,
     tone = "silver",
     variant = "border",
+    frame = "single",
+    tint = false,
     borderWidth = 1.5,
     revealOnHover = false,
     radius = 14,
@@ -68,7 +77,15 @@ export const Metal = forwardRef<HTMLElement, MetalProps>(function Metal(
   return (
     <Tag
       ref={(node: HTMLElement | null) => assignRef(ref, node)}
-      className={cx("argent", border ? "argent--border" : "argent--fill", revealOnHover && "argent--reveal", sheen && "argent--sheen", className)}
+      className={cx(
+        "argent",
+        border ? "argent--border" : "argent--fill",
+        border && frame === "double" && "argent--double",
+        border && tint && "argent--tint",
+        revealOnHover && "argent--reveal",
+        sheen && "argent--sheen",
+        className,
+      )}
       data-tone={tone}
       style={buildVars(radius, borderWidth, style)}
       {...rest}

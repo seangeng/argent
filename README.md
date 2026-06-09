@@ -20,7 +20,9 @@ import "argentui/styles.css";
 
 Each surface renders Paper's `LiquidMetal` shader with `shape="none"` so the metal fills the whole element instead of painting a blob. The shader canvas sits behind your content, clipped to the surface's radius. A tone is just a tuned set of shader params (`colorBack`, `colorTint`, `repetition`, `distortion`, `shiftRed/Blue`, …). Until the canvas mounts on the client, a static CSS gradient stands in (SSR-safe).
 
-Because each surface is its own WebGL canvas, keep the count per page modest — browsers cap concurrent WebGL contexts (~16). Reach for metal on the elements that deserve it; use plain styling for the rest.
+Each surface is its own WebGL canvas, and browsers cap concurrent WebGL contexts (~16). Argent handles this for you: the shader only mounts while a surface is on/near screen (IntersectionObserver) and releases its context when it scrolls away, so a long page stays well under the cap. The static gradient shows in the meantime.
+
+By default the metal is just the **edge** (`variant="border"`) with a calm interior, which keeps content readable; pass `variant="fill"` for a full molten surface, or `revealOnHover` to fill in on interaction.
 
 ## Components
 
@@ -57,11 +59,18 @@ The base primitive every component is built on. Render any element via `as`.
 | prop | type | default | notes |
 |------|------|---------|-------|
 | `as` | `ElementType` | `"div"` | element/component to render |
-| `tone` | `MetalTone` | `"silver"` | finish |
+| `tone` | `MetalTone` | `"silver"` | finish (silver/gold/gunmetal/obsidian) |
+| `variant` | `"border" \| "fill"` | `"border"` | metal edge only, or full surface |
+| `frame` | `"single" \| "double"` | `"single"` | double adds an inner hairline frame |
+| `tint` | `boolean` | `false` | let the metal show faintly through the interior |
+| `revealOnHover` | `boolean` | `false` | fill with metal on hover (border variant) |
+| `borderWidth` | `number` | `1.5` | rim thickness (border variant) |
 | `radius` | `number` | `14` | corner radius (px) |
 | `speed` | `number` | `1` | shader speed (`0` pauses) |
 | `metalScale` | `number` | `1.1` | pattern scale — higher spreads the bands |
 | `sheen` | `boolean` | `false` | specular streak on hover |
+
+Theme the border interior with the `--argent-panel` CSS variable.
 
 Tune any tone with `TONE_PARAMS`, or drop down to `<MetalFill>` / Paper's `<LiquidMetal>` directly for full control.
 

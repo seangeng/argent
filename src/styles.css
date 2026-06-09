@@ -3,7 +3,6 @@
 .argent {
   position: relative;
   isolation: isolate;
-  overflow: hidden;
   display: inline-block;
   color: var(--argent-text);
   border: 1px solid var(--argent-edge);
@@ -72,11 +71,31 @@
 .argent--border { border-color: transparent; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.32); }
 .argent--border > .argent-content { color: var(--argent-panel-text, #f1f2f4); }
 
+/* Tint: let the metal show faintly through the interior panel. */
+.argent--tint .argent-core {
+  background: color-mix(in srgb, var(--argent-panel, #0d0e11) 70%, transparent);
+  backdrop-filter: saturate(120%) brightness(0.7);
+  -webkit-backdrop-filter: saturate(120%) brightness(0.7);
+}
+
+/* Double frame: an inner hairline frame inset from the metal rim, with a gap. */
+.argent--double .argent-core::after {
+  content: "";
+  position: absolute;
+  inset: var(--argent-gap, 5px);
+  z-index: 2;
+  border-radius: inherit;
+  border: 1px solid var(--argent-edge, rgba(255, 255, 255, 0.5));
+  opacity: 0.7;
+  pointer-events: none;
+}
+
 /* ── Specular sheen sweep ─────────────────────────────────────────────── */
 .argent-sheen {
   position: absolute;
   inset: 0;
   z-index: 1;
+  border-radius: inherit;
   pointer-events: none;
   background: linear-gradient(110deg, transparent 36%, var(--argent-sheen) 50%, transparent 64%);
   background-size: 260% 100%;
