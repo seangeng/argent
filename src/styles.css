@@ -1,0 +1,116 @@
+/* Argent — liquid-metal UI. One stylesheet, themeable via CSS variables. */
+
+.argent {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-block;
+  color: var(--argent-text);
+  border: 1px solid var(--argent-edge);
+  box-shadow: var(--argent-shadow);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ── Finishes ─────────────────────────────────────────────────────────── */
+.argent[data-tone="silver"] {
+  --argent-grad: linear-gradient(135deg, #ffffff 0%, #dfe3e8 15%, #a6acb5 35%, #34383e 50%, #b4bac2 64%, #eef1f4 82%, #ffffff 100%);
+  --argent-text: #1a1c20;
+  --argent-edge: rgba(255, 255, 255, 0.7);
+  --argent-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.9), inset 0 -2px 3px rgba(0, 0, 0, 0.22);
+  --argent-sheen: rgba(255, 255, 255, 0.85);
+  --argent-label-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+.argent[data-tone="gold"] {
+  --argent-grad: linear-gradient(135deg, #fff7d6 0%, #ffe08a 20%, #e3a812 44%, #7c5f12 52%, #e6c24e 68%, #ffe08a 86%, #fff7d6 100%);
+  --argent-text: #3a2c05;
+  --argent-edge: rgba(255, 240, 200, 0.7);
+  --argent-shadow: 0 10px 30px rgba(60, 40, 0, 0.4), inset 0 1px 0 rgba(255, 248, 220, 0.9), inset 0 -2px 3px rgba(70, 50, 0, 0.3);
+  --argent-sheen: rgba(255, 250, 220, 0.85);
+  --argent-label-shadow: 0 1px 0 rgba(255, 245, 200, 0.5);
+}
+.argent[data-tone="gunmetal"] {
+  --argent-grad: linear-gradient(135deg, #9aa0aa 0%, #6b7079 18%, #2c2f36 46%, #16181c 54%, #3a3e46 70%, #7a808a 90%, #aab0ba 100%);
+  --argent-text: #f0f2f5;
+  --argent-edge: rgba(255, 255, 255, 0.16);
+  --argent-shadow: 0 12px 34px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -2px 3px rgba(0, 0, 0, 0.5);
+  --argent-sheen: rgba(255, 255, 255, 0.55);
+  --argent-label-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+.argent[data-tone="obsidian"] {
+  --argent-grad: linear-gradient(135deg, #4a4e56 0%, #2a2d33 20%, #0b0c0f 48%, #000000 56%, #23262c 72%, #44484f 92%, #5a5f68 100%);
+  --argent-text: #eef0f3;
+  --argent-edge: rgba(255, 255, 255, 0.12);
+  --argent-shadow: 0 14px 36px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 -2px 4px rgba(0, 0, 0, 0.6);
+  --argent-sheen: rgba(200, 210, 255, 0.5);
+  --argent-label-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+/* ── The flowing metal fill ───────────────────────────────────────────── */
+.argent-fill {
+  position: absolute;
+  inset: -16px; /* bleed so the liquid displacement never opens an edge gap */
+  z-index: 0;
+  background: var(--argent-grad);
+  background-size: 230% 230%;
+  background-position: 0% 50%;
+  animation: argent-flow 9s linear infinite;
+}
+@keyframes argent-flow {
+  to { background-position: 200% 50%; }
+}
+
+/* ── Specular sheen sweep ─────────────────────────────────────────────── */
+.argent-sheen {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 36%, var(--argent-sheen) 50%, transparent 64%);
+  background-size: 260% 100%;
+  background-position: -60% 0;
+  background-repeat: no-repeat;
+  opacity: 0;
+  mix-blend-mode: screen;
+  transition: background-position 0.6s ease, opacity 0.3s ease;
+}
+.argent--sheen:hover .argent-sheen { background-position: 160% 0; opacity: 0.95; }
+
+/* ── Content sits above the metal ─────────────────────────────────────── */
+.argent-content { position: relative; z-index: 2; display: block; }
+
+@media (prefers-reduced-motion: reduce) {
+  .argent-fill { animation: none; }
+  .argent-sheen { transition: opacity 0.2s ease; }
+}
+
+/* ── Card ─────────────────────────────────────────────────────────────── */
+.argent-card { display: block; }
+.argent-card > .argent-content { padding: 20px; }
+
+/* ── Button ───────────────────────────────────────────────────────────── */
+.argent-btn {
+  display: inline-flex;
+  border-radius: 999px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: transform 0.14s cubic-bezier(0.34, 1.5, 0.5, 1), box-shadow 0.2s ease, filter 0.15s ease;
+}
+.argent-btn > .argent-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  text-shadow: var(--argent-label-shadow);
+}
+.argent-btn--sm > .argent-content { padding: 8px 16px; font-size: 13px; }
+.argent-btn--md > .argent-content { padding: 11px 22px; font-size: 14px; }
+.argent-btn--lg > .argent-content { padding: 14px 28px; font-size: 16px; }
+.argent-btn:hover { transform: translateY(-1px); filter: brightness(1.04); }
+.argent-btn:active {
+  transform: translateY(1px) scale(0.99);
+  box-shadow: var(--argent-shadow), inset 0 3px 7px rgba(0, 0, 0, 0.42);
+}
+.argent-btn:focus-visible { outline: 2px solid var(--argent-edge); outline-offset: 2px; }

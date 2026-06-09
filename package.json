@@ -1,0 +1,36 @@
+{
+  "name": "argentui",
+  "version": "0.1.0",
+  "description": "Argent — liquid-metal UI for React. Chrome, gold, and gunmetal surfaces that flow and ripple, built with pure CSS + SVG (no WebGL). A metal sibling to Glacé.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Sean Geng (https://seangeng.com)",
+  "homepage": "https://github.com/seangeng/argent#readme",
+  "repository": { "type": "git", "url": "git+https://github.com/seangeng/argent.git" },
+  "bugs": "https://github.com/seangeng/argent/issues",
+  "keywords": ["react","liquid-metal","metal","chrome","metallic","button","ui","svg","tailwind","shadcn"],
+  "sideEffects": ["**/*.css"],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "require": "./dist/index.cjs" },
+    "./styles.css": "./dist/styles.css"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": { "react": ">=18", "react-dom": ">=18" },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
+  }
+}

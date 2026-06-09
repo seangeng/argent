@@ -1,0 +1,9 @@
+node_modules
+dist
+.vite
+*.log
+.DS_Store
+.wrangler
+site/node_modules
+site/dist
+site/.wrangler
