@@ -54,11 +54,11 @@ body::before {
 }
 .nav .argent { display: block; width: 100%; }
 .nav .argent-content { width: 100%; padding: 10px 16px; }
-.brand { display: flex; align-items: center; gap: 10px; font-weight: 680; letter-spacing: -0.02em; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 720; letter-spacing: -0.02em; color: #15171a; text-shadow: 0 1px 3px rgba(255, 255, 255, 0.7); }
 .brand-mark { width: 22px; height: 22px; border-radius: 7px; }
 .nav-links { display: flex; align-items: center; gap: 18px; font-size: 13.5px; }
-.nav-links a { color: #1a1c20; text-decoration: none; opacity: 0.78; font-weight: 600; }
-.nav-links a:hover { opacity: 1; }
+.nav-links a { color: #15171a; text-decoration: none; font-weight: 700; text-shadow: 0 1px 3px rgba(255, 255, 255, 0.7); }
+.nav-links a:hover { color: #000; }
 
 /* ── Hero ─────────────────────────────────────────────────────────────── */
 .hero { padding: 64px 0 36px; text-align: center; }

@@ -7,7 +7,7 @@ export default defineConfig({
   dts: true,
   clean: true,
   sourcemap: true,
-  external: ["react", "react-dom"],
+  external: ["react", "react-dom", "@paper-design/shaders-react"],
   onSuccess: async () => {
     copyFileSync("src/styles.css", "dist/styles.css");
   },

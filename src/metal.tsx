@@ -1,52 +1,68 @@
 import { useEffect, useState } from "react";
+import { LiquidMetal, type LiquidMetalParams } from "@paper-design/shaders-react";
 
 /**
- * The liquid-metal effect, pure CSS + SVG (no WebGL).
+ * The liquid-metal surface is Paper's `LiquidMetal` WebGL shader
+ * (@paper-design/shaders) run with `shape="none"` so it fills the whole element
+ * instead of painting a blob. Each tone is a tuned set of shader params; the
+ * canvas sits behind the content and is clipped to the surface's radius.
  *
- * A metallic surface is an animated multi-stop chrome gradient (light→dark→light
- * banding — the thing your eye reads as polished reflective metal) flowing under
- * a single global SVG displacement filter that ripples it like mercury. The
- * filter warps the surface's OWN gradient (SourceGraphic), so it's size- and
- * backdrop-independent — one filter serves every metal surface on the page.
- *
- * Two filter strengths are mounted once: a default ripple and a stronger one.
- * `feDisplacementMap` is feature-detected; where SVG filters are unavailable the
- * surface degrades to the (still good-looking) animated gradient alone.
+ * `@paper-design/shaders-react` is a peer dependency — install it alongside
+ * `argentui`. It is licensed under PolyForm Shield by Paper.
  */
 
-const RIPPLE_ID = "argent-ripple";
-const FLOW_ID = "argent-flow";
+export type MetalTone = "silver" | "gold" | "gunmetal" | "obsidian";
 
-let mounted = false;
+type Tuned = Pick<
+  LiquidMetalParams,
+  "colorBack" | "colorTint" | "repetition" | "softness" | "shiftRed" | "shiftBlue" | "distortion" | "contour" | "angle"
+>;
 
-function filter(id: string, scale: number, freq: string): string {
-  return `<filter id="${id}" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
-<feTurbulence type="fractalNoise" baseFrequency="${freq}" numOctaves="2" seed="7" result="n">
-<animate attributeName="baseFrequency" dur="18s" values="${freq};${freq.split(" ").map((f) => (parseFloat(f) * 1.6).toFixed(4)).join(" ")};${freq}" repeatCount="indefinite"/>
-</feTurbulence>
-<feDisplacementMap in="SourceGraphic" in2="n" scale="${scale}" xChannelSelector="R" yChannelSelector="G"/>
-</filter>`;
+export const TONE_PARAMS: Record<MetalTone, Tuned> = {
+  silver: {
+    colorBack: "#a7abb1", colorTint: "#ffffff",
+    repetition: 3, softness: 0.18, shiftRed: 0.32, shiftBlue: 0.32, distortion: 0.14, contour: 0.55, angle: 68,
+  },
+  gold: {
+    colorBack: "#7d6019", colorTint: "#ffe7a0",
+    repetition: 3, softness: 0.2, shiftRed: 0.28, shiftBlue: 0.14, distortion: 0.13, contour: 0.5, angle: 68,
+  },
+  gunmetal: {
+    colorBack: "#33373d", colorTint: "#b2bac4",
+    repetition: 2.6, softness: 0.26, shiftRed: 0.22, shiftBlue: 0.32, distortion: 0.1, contour: 0.45, angle: 80,
+  },
+  obsidian: {
+    colorBack: "#000000", colorTint: "#6c6c74",
+    repetition: 2, softness: 0.42, shiftRed: 0.12, shiftBlue: 0.22, distortion: 0.06, contour: 0.3, angle: 92,
+  },
+};
+
+/** True once mounted on the client — the WebGL canvas can't render during SSR. */
+export function useMounted(): boolean {
+  const [m, setM] = useState(false);
+  useEffect(() => setM(true), []);
+  return m;
 }
 
-function ensureMetalFilters() {
-  if (mounted || typeof document === "undefined") return;
-  const wrap = document.createElement("div");
-  wrap.setAttribute("aria-hidden", "true");
-  wrap.style.cssText = "position:absolute;width:0;height:0;overflow:hidden;pointer-events:none";
-  wrap.innerHTML = `<svg><defs>${filter(RIPPLE_ID, 14, "0.006 0.013")}${filter(FLOW_ID, 26, "0.004 0.010")}</defs></svg>`;
-  document.body.appendChild(wrap);
-  mounted = true;
+export interface MetalFillProps {
+  tone: MetalTone;
+  /** Shader animation speed (0 pauses). */
+  speed?: number;
+  /** Pattern scale — higher spreads the bands out. */
+  scale?: number;
 }
 
-/** Mounts the global metal filters once (client-side) and reports readiness. */
-export function useMetalFilters(): boolean {
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    ensureMetalFilters();
-    setReady(true);
-  }, []);
-  return ready;
+/** The shader canvas, absolutely filling its positioned parent. */
+export function MetalFill({ tone, speed = 1, scale = 1.1 }: MetalFillProps) {
+  if (!useMounted()) return null;
+  return (
+    <LiquidMetal
+      shape="none"
+      fit="cover"
+      scale={scale}
+      speed={speed}
+      {...TONE_PARAMS[tone]}
+      style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+    />
+  );
 }
-
-export const METAL_FILTERS = { ripple: RIPPLE_ID, flow: FLOW_ID } as const;
-export type MetalLiquid = keyof typeof METAL_FILTERS | false;

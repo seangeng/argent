@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { METAL_FILTERS, useMetalFilters, type MetalLiquid } from "./metal";
+import { MetalFill, type MetalTone } from "./metal";
 
 function cx(...parts: (string | false | undefined | null)[]): string {
   return parts.filter(Boolean).join(" ");
@@ -10,8 +10,6 @@ function assignRef<T>(ref: React.ForwardedRef<T>, node: T | null) {
   else if (ref) ref.current = node;
 }
 
-export type MetalTone = "silver" | "gold" | "gunmetal" | "obsidian";
-
 export interface MetalProps extends React.HTMLAttributes<HTMLElement> {
   /** Element/component to render. Defaults to `div`. */
   as?: React.ElementType;
@@ -19,29 +17,23 @@ export interface MetalProps extends React.HTMLAttributes<HTMLElement> {
   tone?: MetalTone;
   /** Corner radius in px. */
   radius?: number;
-  /** Liquid ripple strength: `ripple` (default), `flow` (stronger), or `false`. */
-  liquid?: MetalLiquid;
+  /** Shader animation speed (0 pauses the metal). */
+  speed?: number;
+  /** Pattern scale — higher spreads the reflection bands out. */
+  metalScale?: number;
   /** A specular streak that sweeps across on hover. */
   sheen?: boolean;
 }
 
-function filterValue(liquid: MetalLiquid, ready: boolean): string | undefined {
-  if (!liquid || !ready) return undefined;
-  return `url(#${METAL_FILTERS[liquid]})`;
-}
-
 /**
- * A liquid-metal surface — an animated chrome gradient that ripples like
- * mercury. The foundation for every Argent component; render any element via `as`.
+ * A liquid-metal surface powered by Paper's `LiquidMetal` shader. The base for
+ * every Argent component; render any element via `as`.
  */
 export const Metal = forwardRef<HTMLElement, MetalProps>(function Metal(
-  { as, tone = "silver", radius = 14, liquid = "ripple", sheen = false, className, style, children, ...rest },
+  { as, tone = "silver", radius = 14, speed, metalScale, sheen = false, className, style, children, ...rest },
   ref,
 ) {
-  const ready = useMetalFilters();
   const Tag = (as ?? "div") as React.ElementType;
-  const fv = filterValue(liquid, ready);
-
   return (
     <Tag
       ref={(node: HTMLElement | null) => assignRef(ref, node)}
@@ -50,11 +42,9 @@ export const Metal = forwardRef<HTMLElement, MetalProps>(function Metal(
       style={{ borderRadius: radius, ...style }}
       {...rest}
     >
-      <span
-        className="argent-fill"
-        aria-hidden="true"
-        style={fv ? { filter: fv, WebkitFilter: fv } : undefined}
-      />
+      <span className="argent-fill" aria-hidden="true">
+        <MetalFill tone={tone} speed={speed} scale={metalScale} />
+      </span>
       {sheen && <span className="argent-sheen" aria-hidden="true" />}
       <span className="argent-content">{children}</span>
     </Tag>
@@ -74,17 +64,14 @@ export const MetalCard = forwardRef<HTMLElement, MetalCardProps>(function MetalC
 export interface MetalButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   tone?: MetalTone;
   size?: "sm" | "md" | "lg";
-  liquid?: MetalLiquid;
+  speed?: number;
 }
 
-/** A liquid-metal button — flowing chrome, a sheen sweep, and a stamped press. */
+/** A liquid-metal button — a flowing shader finish, a sheen sweep, a stamped press. */
 export const MetalButton = forwardRef<HTMLButtonElement, MetalButtonProps>(function MetalButton(
-  { tone = "silver", size = "md", liquid = "ripple", type = "button", className, children, ...rest },
+  { tone = "silver", size = "md", speed, type = "button", className, children, ...rest },
   ref,
 ) {
-  const ready = useMetalFilters();
-  const fv = filterValue(liquid, ready);
-
   return (
     <button
       ref={ref}
@@ -93,7 +80,9 @@ export const MetalButton = forwardRef<HTMLButtonElement, MetalButtonProps>(funct
       data-tone={tone}
       {...rest}
     >
-      <span className="argent-fill" aria-hidden="true" style={fv ? { filter: fv, WebkitFilter: fv } : undefined} />
+      <span className="argent-fill" aria-hidden="true">
+        <MetalFill tone={tone} speed={speed} scale={0.9} />
+      </span>
       <span className="argent-sheen" aria-hidden="true" />
       <span className="argent-content argent-btn-label">{children}</span>
     </button>

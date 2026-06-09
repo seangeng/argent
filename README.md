@@ -1,10 +1,12 @@
 # Argent
 
-**Liquid-metal UI for React.** Flowing chrome, gold, and gunmetal surfaces that ripple like mercury — built with pure CSS + SVG. No WebGL, no canvas, SSR-safe. A metal sibling to [Glacé](https://glaceui.com).
+**Liquid-metal UI for React.** Flowing chrome, gold, and gunmetal surfaces that ripple like mercury — real liquid metal, powered by [Paper's `LiquidMetal` WebGL shader](https://shaders.paper.design/liquid-metal), wrapped in components. A metal sibling to [Glacé](https://glaceui.com).
 
 ```bash
-npm i argentui
+npm i argentui @paper-design/shaders-react
 ```
+
+> `@paper-design/shaders-react` is a **peer dependency** — install it alongside `argentui`. It's the WebGL shader engine, by [Paper](https://paper.design), licensed under PolyForm Shield.
 
 ```tsx
 import { MetalButton, MetalCard, Metal } from "argentui";
@@ -16,24 +18,24 @@ import "argentui/styles.css";
 
 ## How it works
 
-A metallic surface is a multi-stop **chrome gradient** (light→dark→light banding — the thing your eye reads as polished reflective metal) that flows under a single global **SVG displacement filter** (`feTurbulence` + `feDisplacementMap`) which warps it like mercury. The filter is mounted once and warps each surface's own gradient, so it's size- and backdrop-independent. Where SVG filters aren't available the surface degrades to the (still good-looking) animated gradient alone.
+Each surface renders Paper's `LiquidMetal` shader with `shape="none"` so the metal fills the whole element instead of painting a blob. The shader canvas sits behind your content, clipped to the surface's radius. A tone is just a tuned set of shader params (`colorBack`, `colorTint`, `repetition`, `distortion`, `shiftRed/Blue`, …). Until the canvas mounts on the client, a static CSS gradient stands in (SSR-safe).
 
-No images, no WebGL, no canvas — just CSS and one SVG filter.
+Because each surface is its own WebGL canvas, keep the count per page modest — browsers cap concurrent WebGL contexts (~16). Reach for metal on the elements that deserve it; use plain styling for the rest.
 
 ## Components
 
 ### `<MetalButton>`
-A stamped-metal button: flowing finish, a sheen sweep on hover, a real press.
+A stamped-metal button: a flowing shader finish, a sheen sweep on hover, a real press.
 
 ```tsx
-<MetalButton tone="gold" size="lg" liquid="flow">Buy</MetalButton>
+<MetalButton tone="gold" size="lg">Buy</MetalButton>
 ```
 
 | prop | type | default |
 |------|------|---------|
 | `tone` | `"silver" \| "gold" \| "gunmetal" \| "obsidian"` | `"silver"` |
 | `size` | `"sm" \| "md" \| "lg"` | `"md"` |
-| `liquid` | `"ripple" \| "flow" \| false` | `"ripple"` |
+| `speed` | `number` | `1` |
 
 ### `<MetalCard>`
 A padded liquid-metal panel.
@@ -49,7 +51,7 @@ A padded liquid-metal panel.
 The base primitive every component is built on. Render any element via `as`.
 
 ```tsx
-<Metal as="nav" tone="silver" radius={16} liquid="ripple" sheen>…</Metal>
+<Metal as="nav" tone="silver" radius={16} speed={0.5} sheen>…</Metal>
 ```
 
 | prop | type | default | notes |
@@ -57,9 +59,16 @@ The base primitive every component is built on. Render any element via `as`.
 | `as` | `ElementType` | `"div"` | element/component to render |
 | `tone` | `MetalTone` | `"silver"` | finish |
 | `radius` | `number` | `14` | corner radius (px) |
-| `liquid` | `"ripple" \| "flow" \| false` | `"ripple"` | ripple strength |
+| `speed` | `number` | `1` | shader speed (`0` pauses) |
+| `metalScale` | `number` | `1.1` | pattern scale — higher spreads the bands |
 | `sheen` | `boolean` | `false` | specular streak on hover |
+
+Tune any tone with `TONE_PARAMS`, or drop down to `<MetalFill>` / Paper's `<LiquidMetal>` directly for full control.
+
+## Credits
+
+Liquid-metal shader by [Paper](https://shaders.paper.design/liquid-metal) (`@paper-design/shaders`). Argent is the component layer, motion, and theming on top.
 
 ## License
 
-MIT © [Sean Geng](https://seangeng.com)
+MIT © [Sean Geng](https://seangeng.com). The bundled shader engine (`@paper-design/shaders-react`, a peer dependency) is licensed separately under PolyForm Shield by Paper.

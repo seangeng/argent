@@ -30,7 +30,7 @@ export function App() {
     <>
       {/* Header */}
       <header className="nav">
-        <Metal as="nav" tone="silver" radius={16} sheen className="nav-metal">
+        <Metal as="nav" tone="silver" radius={16} speed={0.5} sheen className="nav-metal">
           <div className="nav-inner">
             <span className="brand">
               <img className="brand-mark" src={MARK} alt="" />
@@ -56,8 +56,8 @@ export function App() {
             for React
           </h1>
           <p className="lede">
-            Flowing chrome, gold, and gunmetal surfaces that ripple like mercury — built with pure
-            CSS + SVG. No WebGL, no canvas, SSR-safe. A metal sibling to{" "}
+            Flowing chrome, gold, and gunmetal surfaces that ripple like mercury — real liquid
+            metal, powered by Paper's WebGL shader, wrapped in components. A metal sibling to{" "}
             <a href="https://glaceui.com" style={{ color: "#cdd2da" }}>
               Glacé
             </a>
@@ -74,8 +74,8 @@ export function App() {
         {/* Showcase */}
         <div className="stage" style={{ marginBottom: 8 }}>
           {TONES.map((t) => (
-            <Metal key={t} tone={t} radius={18} sheen liquid="flow">
-              <div style={{ padding: "30px 34px", fontSize: 20, fontWeight: 680, letterSpacing: "-0.03em" }}>
+            <Metal key={t} tone={t} radius={18} sheen>
+              <div style={{ padding: "30px 34px", fontSize: 20, fontWeight: 700, letterSpacing: "-0.03em", textShadow: "0 1px 6px rgba(0,0,0,0.45), 0 0 1px rgba(255,255,255,0.6)" }}>
                 {t}
               </div>
             </Metal>
@@ -112,7 +112,7 @@ import "argentui/styles.css";
 
 <MetalButton tone="silver">Silver</MetalButton>
 <MetalButton tone="gold" size="lg">Gold</MetalButton>
-<MetalButton tone="gunmetal" liquid="flow">Gunmetal</MetalButton>`}
+<MetalButton tone="gunmetal" size="lg">Gunmetal</MetalButton>`}
             />
           </div>
         </div>
@@ -128,9 +128,9 @@ import "argentui/styles.css";
             <div className="stage">
               <MetalCard tone="gunmetal" sheen style={{ maxWidth: 320 }}>
                 <div style={{ fontSize: 17, fontWeight: 660, marginBottom: 6 }}>Forged in the browser</div>
-                <p style={{ margin: 0, fontSize: 14, opacity: 0.85, lineHeight: 1.5 }}>
-                  The surface is an animated chrome gradient rippled by an SVG displacement filter —
-                  no images, no WebGL.
+                <p style={{ margin: 0, fontSize: 14, opacity: 0.9, lineHeight: 1.5 }}>
+                  The surface is Paper's LiquidMetal shader running edge-to-edge — true flowing
+                  chrome, clipped to the card and dropped behind your content.
                 </p>
               </MetalCard>
             </div>
@@ -159,7 +159,7 @@ import "argentui/styles.css";
           </p>
           <div className="grid2">
             <div className="stage">
-              <Metal as="div" tone="gold" radius={24} sheen liquid="flow">
+              <Metal as="div" tone="gold" radius={24} sheen metalScale={1.4}>
                 <div style={{ padding: 28, fontSize: 18, fontWeight: 660, maxWidth: 240 }}>
                   Any element, any shape — molten gold.
                 </div>
@@ -169,7 +169,7 @@ import "argentui/styles.css";
               code={`import { Metal } from "argentui";
 
 <Metal as="div" tone="gold"
-  radius={24} liquid="flow" sheen>
+  radius={24} metalScale={1.4} sheen>
   Any element, any shape.
 </Metal>`}
             />

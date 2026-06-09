@@ -8,6 +8,7 @@
     "deploy": "vite build && wrangler deploy"
   },
   "dependencies": {
+    "@paper-design/shaders-react": "^0.0.76",
     "@radix-ui/react-select": "^2.3.0",
     "argentui": "file:..",
     "prism-react-renderer": "^2.4.1",

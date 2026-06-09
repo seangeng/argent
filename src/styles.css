@@ -45,19 +45,16 @@
   --argent-label-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
-/* ── The flowing metal fill ───────────────────────────────────────────── */
+/* ── The flowing metal fill (Paper LiquidMetal shader canvas) ─────────── */
 .argent-fill {
   position: absolute;
-  inset: -16px; /* bleed so the liquid displacement never opens an edge gap */
+  inset: 0;
   z-index: 0;
-  background: var(--argent-grad);
-  background-size: 230% 230%;
-  background-position: 0% 50%;
-  animation: argent-flow 9s linear infinite;
+  border-radius: inherit;
+  overflow: hidden;
+  background: var(--argent-grad); /* shown until the shader canvas mounts */
 }
-@keyframes argent-flow {
-  to { background-position: 200% 50%; }
-}
+.argent-fill canvas { display: block; width: 100% !important; height: 100% !important; }
 
 /* ── Specular sheen sweep ─────────────────────────────────────────────── */
 .argent-sheen {
