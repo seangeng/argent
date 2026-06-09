@@ -74,13 +74,16 @@ export function App() {
         {/* Showcase */}
         <div className="stage" style={{ marginBottom: 8 }}>
           {TONES.map((t) => (
-            <Metal key={t} tone={t} radius={18} sheen>
-              <div style={{ padding: "30px 34px", fontSize: 20, fontWeight: 700, letterSpacing: "-0.03em", textShadow: "0 1px 6px rgba(0,0,0,0.45), 0 0 1px rgba(255,255,255,0.6)" }}>
+            <Metal key={t} tone={t} radius={18} borderWidth={2.5} revealOnHover sheen>
+              <div style={{ padding: "30px 34px", fontSize: 20, fontWeight: 700, letterSpacing: "-0.03em" }}>
                 {t}
               </div>
             </Metal>
           ))}
         </div>
+        <p style={{ textAlign: "center", color: "var(--ink-3)", fontSize: 13, marginTop: 12 }}>
+          Metal edge by default — hover a tile to fill it.
+        </p>
       </div>
 
       {/* Buttons */}
@@ -123,10 +126,10 @@ import "argentui/styles.css";
         <div className="wrap">
           <p className="eyebrow">Component</p>
           <h2>Cards</h2>
-          <p>A padded liquid-metal panel. Drop any content inside; the metal flows behind it.</p>
+          <p>A padded liquid-metal panel — a metal edge by default. Hover it to fill with metal.</p>
           <div className="grid2">
             <div className="stage">
-              <MetalCard tone="gunmetal" sheen style={{ maxWidth: 320 }}>
+              <MetalCard tone="gunmetal" revealOnHover sheen style={{ maxWidth: 320 }}>
                 <div style={{ fontSize: 17, fontWeight: 660, marginBottom: 6 }}>Forged in the browser</div>
                 <p style={{ margin: 0, fontSize: 14, opacity: 0.9, lineHeight: 1.5 }}>
                   The surface is Paper's LiquidMetal shader running edge-to-edge — true flowing
@@ -137,10 +140,11 @@ import "argentui/styles.css";
             <CodeBlock
               code={`import { MetalCard } from "argentui";
 
-<MetalCard tone="gunmetal" sheen>
+// metal edge; fills with metal on hover
+<MetalCard tone="gunmetal" revealOnHover sheen>
   <h3>Forged in the browser</h3>
-  <p>The surface is an animated chrome
-     gradient rippled by SVG.</p>
+  <p>Paper's LiquidMetal shader,
+     clipped behind your content.</p>
 </MetalCard>`}
             />
           </div>
@@ -155,13 +159,14 @@ import "argentui/styles.css";
           <p>
             <code style={{ fontFamily: "var(--mono)", fontSize: 14 }}>&lt;Metal&gt;</code> is the
             base every component is built on. Render any element with <code style={{ fontFamily: "var(--mono)", fontSize: 14 }}>as</code>,
-            pick a tone, dial the ripple, and wrap whatever you like.
+            pick a tone, and choose <code style={{ fontFamily: "var(--mono)", fontSize: 14 }}>variant="border"</code> (default)
+            or <code style={{ fontFamily: "var(--mono)", fontSize: 14 }}>"fill"</code> for the full molten surface.
           </p>
           <div className="grid2">
             <div className="stage">
-              <Metal as="div" tone="gold" radius={24} sheen metalScale={1.4}>
-                <div style={{ padding: 28, fontSize: 18, fontWeight: 660, maxWidth: 240 }}>
-                  Any element, any shape — molten gold.
+              <Metal as="div" tone="gold" variant="fill" radius={24} sheen metalScale={1.4}>
+                <div style={{ padding: 28, fontSize: 18, fontWeight: 700, maxWidth: 240, textShadow: "0 1px 6px rgba(0,0,0,0.4)" }}>
+                  Full fill — molten gold.
                 </div>
               </Metal>
             </div>
@@ -169,8 +174,9 @@ import "argentui/styles.css";
               code={`import { Metal } from "argentui";
 
 <Metal as="div" tone="gold"
-  radius={24} metalScale={1.4} sheen>
-  Any element, any shape.
+  variant="fill" radius={24}
+  metalScale={1.4} sheen>
+  Full fill — molten gold.
 </Metal>`}
             />
           </div>

@@ -56,6 +56,22 @@
 }
 .argent-fill canvas { display: block; width: 100% !important; height: 100% !important; }
 
+/* Border variant: a panel covers the centre, leaving the metal as an edge.
+   --argent-panel is the interior colour; theme it to your surface. */
+.argent-core {
+  position: absolute;
+  inset: var(--argent-bw, 1.5px);
+  z-index: 1;
+  border-radius: inherit;
+  background: var(--argent-panel, #0d0e11);
+  transition: opacity 0.4s ease;
+}
+.argent--reveal:hover .argent-core { opacity: 0; }
+
+/* In border mode the metal ring is the border, and content sits on the panel. */
+.argent--border { border-color: transparent; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.32); }
+.argent--border > .argent-content { color: var(--argent-panel-text, #f1f2f4); }
+
 /* ── Specular sheen sweep ─────────────────────────────────────────────── */
 .argent-sheen {
   position: absolute;

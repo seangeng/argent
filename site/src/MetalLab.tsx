@@ -1,18 +1,23 @@
 import { useState } from "react";
-import { Metal, type MetalTone } from "argentui";
+import { Metal, type MetalTone, type MetalVariant } from "argentui";
 import { CodeBlock } from "./CodeBlock";
 
 const TONES: MetalTone[] = ["silver", "gold", "gunmetal", "obsidian"];
+const VARIANTS: MetalVariant[] = ["border", "fill"];
 
 export function MetalLab() {
   const [tone, setTone] = useState<MetalTone>("silver");
+  const [variant, setVariant] = useState<MetalVariant>("border");
+  const [reveal, setReveal] = useState(true);
   const [radius, setRadius] = useState(20);
   const [speed, setSpeed] = useState(1);
   const [metalScale, setMetalScale] = useState(1.1);
   const [sheen, setSheen] = useState(true);
 
+  const showReveal = variant === "border";
   const code = `<Metal
   tone="${tone}"
+  variant="${variant}"${showReveal && reveal ? "\n  revealOnHover" : ""}
   radius={${radius}}
   speed={${speed}}
   metalScale={${metalScale}}${sheen ? "\n  sheen" : ""}
@@ -33,6 +38,25 @@ export function MetalLab() {
             ))}
           </div>
         </div>
+        <div className="ctl">
+          <label>Variant</label>
+          <div className="seg">
+            {VARIANTS.map((v) => (
+              <button key={v} data-on={variant === v} onClick={() => setVariant(v)}>
+                {v}
+              </button>
+            ))}
+          </div>
+        </div>
+        {showReveal && (
+          <div className="ctl">
+            <label>Fill on hover</label>
+            <div className="seg">
+              <button data-on={reveal} onClick={() => setReveal(true)}>on</button>
+              <button data-on={!reveal} onClick={() => setReveal(false)}>off</button>
+            </div>
+          </div>
+        )}
         <div className="ctl">
           <label>
             Radius <b>{radius}px</b>
@@ -62,7 +86,7 @@ export function MetalLab() {
 
       <div>
         <div className="stage lab-stage">
-          <Metal tone={tone} radius={radius} speed={speed} metalScale={metalScale} sheen={sheen}>
+          <Metal tone={tone} variant={variant} revealOnHover={showReveal && reveal} radius={radius} speed={speed} metalScale={metalScale} sheen={sheen}>
             <div style={{ padding: 40, fontSize: 24, fontWeight: 700, letterSpacing: "-0.03em", minWidth: 220, textAlign: "center" }}>
               Argent
             </div>
