@@ -103,7 +103,6 @@
 /* ── Button ───────────────────────────────────────────────────────────── */
 .argent-btn {
   display: inline-flex;
-  border-radius: 999px;
   cursor: pointer;
   -webkit-user-select: none;
   user-select: none;
@@ -116,7 +115,16 @@
   gap: 8px;
   font-weight: 650;
   letter-spacing: -0.01em;
-  text-shadow: var(--argent-label-shadow);
+}
+/* Border button: light label on the dark pill. */
+.argent-btn.argent--border > .argent-content {
+  color: var(--argent-panel-text, #f1f2f4);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+}
+/* Fill button: white label with a layered dark halo so it reads over any band. */
+.argent-btn.argent--fill > .argent-content {
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 10px rgba(0, 0, 0, 0.65);
 }
 .argent-btn--sm > .argent-content { padding: 8px 16px; font-size: 13px; }
 .argent-btn--md > .argent-content { padding: 11px 22px; font-size: 14px; }

@@ -92,8 +92,9 @@ export function App() {
           <p className="eyebrow">Component</p>
           <h2>Buttons</h2>
           <p>
-            A stamped-metal button: flowing finish, a sheen that sweeps on hover, and a real press.
-            Four tones, three sizes.
+            Readable at rest — a calm pill with a liquid-metal rim — then molten on hover. A sheen
+            sweep and a real press. Four tones, three sizes. Pass <code style={{ fontFamily: "var(--mono)", fontSize: 14 }}>variant="fill"</code> for
+            full chrome.
           </p>
           <div className="grid2">
             <div className="stage" style={{ flexDirection: "column", gap: 16 }}>
@@ -108,14 +109,21 @@ export function App() {
                 <MetalButton tone="silver" size="md">Medium</MetalButton>
                 <MetalButton tone="silver" size="lg">Large</MetalButton>
               </div>
+              <div className="row" style={{ justifyContent: "center" }}>
+                <MetalButton tone="silver" variant="fill">Fill</MetalButton>
+                <MetalButton tone="gold" variant="fill">Fill</MetalButton>
+              </div>
             </div>
             <CodeBlock
               code={`import { MetalButton } from "argentui";
 import "argentui/styles.css";
 
+// readable pill, fills with metal on hover
 <MetalButton tone="silver">Silver</MetalButton>
 <MetalButton tone="gold" size="lg">Gold</MetalButton>
-<MetalButton tone="gunmetal" size="lg">Gunmetal</MetalButton>`}
+
+// full chrome
+<MetalButton tone="silver" variant="fill">Fill</MetalButton>`}
             />
           </div>
         </div>

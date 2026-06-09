@@ -96,16 +96,21 @@ export const MetalCard = forwardRef<HTMLElement, MetalCardProps>(function MetalC
 export interface MetalButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   tone?: MetalTone;
   size?: "sm" | "md" | "lg";
-  /** `"fill"` (default for buttons) or `"border"`. */
+  /** `"border"` (default — readable, fills on hover) or `"fill"` (full chrome). */
   variant?: MetalVariant;
+  /** Corner radius in px. */
+  radius?: number;
   borderWidth?: number;
+  /** Fill with metal on hover (border variant). Defaults to `true`. */
   revealOnHover?: boolean;
   speed?: number;
 }
 
-/** A liquid-metal button — a flowing shader finish, a sheen sweep, a stamped press. */
+const SIZE_RADIUS = { sm: 11, md: 13, lg: 15 } as const;
+
+/** A liquid-metal button — readable at rest, molten on hover, with a stamped press. */
 export const MetalButton = forwardRef<HTMLButtonElement, MetalButtonProps>(function MetalButton(
-  { tone = "silver", size = "md", variant = "fill", borderWidth = 1.5, revealOnHover = false, speed, type = "button", className, children, style, ...rest },
+  { tone = "silver", size = "md", variant = "border", radius, borderWidth = 1.5, revealOnHover = true, speed, type = "button", className, children, style, ...rest },
   ref,
 ) {
   const border = variant === "border";
@@ -113,9 +118,9 @@ export const MetalButton = forwardRef<HTMLButtonElement, MetalButtonProps>(funct
     <button
       ref={ref}
       type={type}
-      className={cx("argent", border ? "argent--border" : "argent--fill", revealOnHover && "argent--reveal", "argent--sheen", "argent-btn", `argent-btn--${size}`, className)}
+      className={cx("argent", border ? "argent--border" : "argent--fill", border && revealOnHover && "argent--reveal", "argent--sheen", "argent-btn", `argent-btn--${size}`, className)}
       data-tone={tone}
-      style={buildVars(999, borderWidth, style)}
+      style={buildVars(radius ?? SIZE_RADIUS[size], borderWidth, style)}
       {...rest}
     >
       <span className="argent-fill" aria-hidden="true">
