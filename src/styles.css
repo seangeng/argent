@@ -11,7 +11,7 @@
 }
 
 /* ── Finishes ─────────────────────────────────────────────────────────── */
-.argent[data-tone="silver"] {
+.argent[data-tone="silver"], [data-tone="silver"] {
   --argent-grad: linear-gradient(135deg, #ffffff 0%, #dfe3e8 15%, #a6acb5 35%, #34383e 50%, #b4bac2 64%, #eef1f4 82%, #ffffff 100%);
   --argent-text: #1a1c20;
   --argent-edge: rgba(255, 255, 255, 0.7);
@@ -19,7 +19,7 @@
   --argent-sheen: rgba(255, 255, 255, 0.85);
   --argent-label-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
-.argent[data-tone="gold"] {
+.argent[data-tone="gold"], [data-tone="gold"] {
   --argent-grad: linear-gradient(135deg, #fff7d6 0%, #ffe08a 20%, #e3a812 44%, #7c5f12 52%, #e6c24e 68%, #ffe08a 86%, #fff7d6 100%);
   --argent-text: #3a2c05;
   --argent-edge: rgba(255, 240, 200, 0.7);
@@ -27,7 +27,7 @@
   --argent-sheen: rgba(255, 250, 220, 0.85);
   --argent-label-shadow: 0 1px 0 rgba(255, 245, 200, 0.5);
 }
-.argent[data-tone="gunmetal"] {
+.argent[data-tone="gunmetal"], [data-tone="gunmetal"] {
   --argent-grad: linear-gradient(135deg, #9aa0aa 0%, #6b7079 18%, #2c2f36 46%, #16181c 54%, #3a3e46 70%, #7a808a 90%, #aab0ba 100%);
   --argent-text: #f0f2f5;
   --argent-edge: rgba(255, 255, 255, 0.16);
@@ -35,7 +35,7 @@
   --argent-sheen: rgba(255, 255, 255, 0.55);
   --argent-label-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
-.argent[data-tone="obsidian"] {
+.argent[data-tone="obsidian"], [data-tone="obsidian"] {
   --argent-grad: linear-gradient(135deg, #4a4e56 0%, #2a2d33 20%, #0b0c0f 48%, #000000 56%, #23262c 72%, #44484f 92%, #5a5f68 100%);
   --argent-text: #eef0f3;
   --argent-edge: rgba(255, 255, 255, 0.12);
@@ -154,3 +154,108 @@
   box-shadow: var(--argent-shadow), inset 0 3px 7px rgba(0, 0, 0, 0.42);
 }
 .argent-btn:focus-visible { outline: 2px solid var(--argent-edge); outline-offset: 2px; }
+
+/* ── Chrome text ──────────────────────────────────────────────────────── */
+.argent-text {
+  --argent-text-grad: linear-gradient(135deg, #ffffff 0%, #cdd2da 22%, #7e858f 42%, #3a3e44 50%, #aab0b9 60%, #f0f2f5 80%, #ffffff 100%);
+  background: var(--argent-text-grad);
+  background-size: 220% 220%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.argent-text[data-tone="gold"] {
+  --argent-text-grad: linear-gradient(135deg, #fff7d6 0%, #ffdf85 20%, #e0a912 42%, #8a6a10 50%, #e8c54e 62%, #ffe9a4 82%, #fff7d6 100%);
+}
+.argent-text[data-tone="gunmetal"] {
+  --argent-text-grad: linear-gradient(135deg, #c6ccd6 0%, #8a9098 22%, #3a3e46 46%, #21242a 54%, #585d66 68%, #a8aeb8 86%, #ccd2dc 100%);
+}
+.argent-text[data-tone="obsidian"] {
+  --argent-text-grad: linear-gradient(135deg, #9a9ca8 0%, #54565e 25%, #17181c 48%, #060608 56%, #3c3e46 72%, #84868f 92%, #a8aab4 100%);
+}
+.argent-text--shimmer { animation: argent-shimmer 7s linear infinite; }
+@keyframes argent-shimmer {
+  to { background-position: 200% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .argent-text--shimmer { animation: none; }
+}
+
+/* ── Toggle (mercury switch) ──────────────────────────────────────────── */
+.argent-toggle {
+  position: relative;
+  width: 50px;
+  height: 28px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: var(--argent-panel, #0d0e11);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+  padding: 0;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.argent-toggle[data-checked] {
+  border-color: var(--argent-edge, rgba(255, 255, 255, 0.5));
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.55), 0 0 14px -4px var(--argent-sheen, rgba(255, 255, 255, 0.5));
+}
+.argent-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  overflow: hidden;
+  transform: translateX(0);
+  transition: transform 0.26s cubic-bezier(0.34, 1.45, 0.55, 1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  background: var(--argent-grad);
+}
+.argent-toggle[data-checked] .argent-toggle-thumb { transform: translateX(22px); }
+/* mercury squish while pressed */
+.argent-toggle:active .argent-toggle-thumb { transform: translateX(0) scale(1.12, 0.9); }
+.argent-toggle[data-checked]:active .argent-toggle-thumb { transform: translateX(22px) scale(1.12, 0.9); }
+.argent-toggle:focus-visible { outline: 2px solid var(--argent-edge, rgba(255, 255, 255, 0.5)); outline-offset: 2px; }
+.argent-toggle:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ── Progress (molten bar) ────────────────────────────────────────────── */
+.argent-progress {
+  position: relative;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--argent-panel, #0d0e11);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+.argent-progress-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  background: var(--argent-grad);
+  transition: width 0.45s cubic-bezier(0.33, 1, 0.68, 1);
+}
+.argent-progress--indeterminate .argent-progress-fill {
+  width: 36%;
+  animation: argent-sweep 1.5s ease-in-out infinite;
+}
+@keyframes argent-sweep {
+  from { left: -36%; }
+  to { left: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .argent-progress--indeterminate .argent-progress-fill { animation-duration: 3s; }
+}
+
+/* ── Badge ────────────────────────────────────────────────────────────── */
+.argent-badge > .argent-content {
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 620;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}

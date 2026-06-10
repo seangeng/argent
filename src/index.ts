@@ -1,4 +1,13 @@
 export { Metal, MetalCard, MetalButton } from "./surfaces";
 export type { MetalProps, MetalCardProps, MetalButtonProps, MetalVariant, MetalFrame } from "./surfaces";
-export { MetalFill, TONE_PARAMS, useMounted } from "./metal";
+export { MetalToggle, MetalProgress, MetalBadge } from "./controls";
+export type { MetalToggleProps, MetalProgressProps, MetalBadgeProps } from "./controls";
+export { MetalText } from "./text";
+export type { MetalTextProps } from "./text";
+export { MetalLogo } from "./logo";
+export type { MetalLogoProps } from "./logo";
+export { MetalFill, TONE_PARAMS, useMounted, useInView, useReducedMotion } from "./metal";
 export type { MetalTone, MetalFillProps } from "./metal";
+export { mountMetal, NATIVE_TONES } from "./engine";
+export type { MetalEngine, NativeMetalParams, MetalMount } from "./engine";
+export { setHaptics } from "./haptics";

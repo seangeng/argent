@@ -2,6 +2,10 @@
 
 **Liquid-metal UI for React.** Flowing chrome, gold, and gunmetal surfaces that ripple like mercury — real liquid metal, powered by [Paper's `LiquidMetal` WebGL shader](https://shaders.paper.design/liquid-metal), wrapped in components. A metal sibling to [Glacé](https://glaceui.com).
 
+[**argentui.com**](https://argentui.seangeng94.workers.dev) · [npm](https://www.npmjs.com/package/argentui)
+
+![Argent](https://cdn.jsdelivr.net/gh/seangeng/argent@main/assets/hero.png)
+
 ```bash
 npm i argentui @paper-design/shaders-react
 ```
@@ -27,7 +31,9 @@ By default the metal is just the **edge** (`variant="border"`) with a calm inter
 ## Components
 
 ### `<MetalButton>`
-A stamped-metal button: a flowing shader finish, a sheen sweep on hover, a real press.
+A stamped-metal button: readable at rest with a liquid-metal rim, molten on hover, with a real press (and haptics on supporting devices).
+
+![Buttons](https://cdn.jsdelivr.net/gh/seangeng/argent@main/assets/buttons.png)
 
 ```tsx
 <MetalButton tone="gold" size="lg">Buy</MetalButton>
@@ -47,6 +53,36 @@ A padded liquid-metal panel.
   <h3>Title</h3>
   <p>Any content — the metal flows behind it.</p>
 </MetalCard>
+```
+
+### `<MetalText>`
+Chrome text — a metallic gradient clipped to the glyphs with a flowing shimmer. Pure CSS, no WebGL.
+
+![Chrome text](https://cdn.jsdelivr.net/gh/seangeng/argent@main/assets/text.png)
+
+```tsx
+<MetalText tone="gold" style={{ fontSize: 64 }}>Solid gold</MetalText>
+```
+
+### `<MetalLogo>`
+Pour the metal into any mark — pass an image with a transparent background and it flows inside the silhouette.
+
+![Liquid logo](https://cdn.jsdelivr.net/gh/seangeng/argent@main/assets/logos.png)
+
+```tsx
+<MetalLogo src="/logo.svg" tone="silver" size={170} />
+```
+
+### `<MetalToggle>` / `<MetalProgress>` / `<MetalBadge>`
+A mercury switch (the thumb squishes as you press it), a molten progress bar, and metal-rimmed badges.
+
+![Controls](https://cdn.jsdelivr.net/gh/seangeng/argent@main/assets/controls.png)
+
+```tsx
+<MetalToggle tone="silver" defaultChecked onCheckedChange={setOn} />
+<MetalProgress tone="silver" value={64} />
+<MetalProgress tone="gold" />  {/* indeterminate */}
+<MetalBadge tone="gold">Pro</MetalBadge>
 ```
 
 ### `<Metal>`
@@ -73,6 +109,18 @@ The base primitive every component is built on. Render any element via `as`.
 Theme the border interior with the `--argent-panel` CSS variable.
 
 Tune any tone with `TONE_PARAMS`, or drop down to `<MetalFill>` / Paper's `<LiquidMetal>` directly for full control.
+
+## The native engine
+
+Argent also ships its own clean-room WebGL2 shader — pass `engine="native"` to any surface to use it instead of Paper's. Same recipe (reflection banding, noise flow, chromatic dispersion), zero extra dependencies, MIT all the way down. It currently powers the rim/border look best; the Paper engine remains the default.
+
+```tsx
+<Metal tone="silver" engine="native">…</Metal>
+```
+
+## Accessibility
+
+The shader pauses under `prefers-reduced-motion`; toggles are real `role="switch"` buttons; progress bars carry `role="progressbar"` with values; labels keep WCAG-ish contrast on every variant. Haptics (`navigator.vibrate`) fire on press where supported — disable globally with `setHaptics(false)`.
 
 ## Credits
 

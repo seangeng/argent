@@ -1,7 +1,22 @@
-import { useState } from "react";
-import { Metal, MetalCard, MetalButton, type MetalTone } from "argentui";
+import { useEffect, useState } from "react";
+import { Metal, MetalCard, MetalButton, MetalText, MetalLogo, MetalToggle, MetalProgress, MetalBadge, type MetalTone } from "argentui";
 import { CodeBlock } from "./CodeBlock";
 import { MetalLab } from "./MetalLab";
+
+const LOGO_SRC =
+  "data:image/svg+xml," +
+  encodeURIComponent(
+    `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><text x='100' y='162' font-size='190' font-family='Helvetica, Arial, sans-serif' font-weight='800' text-anchor='middle' fill='#000'>A</text></svg>`,
+  );
+
+function ProgressDemo() {
+  const [value, setValue] = useState(12);
+  useEffect(() => {
+    const id = setInterval(() => setValue((v) => (v >= 100 ? 8 : v + Math.random() * 16)), 900);
+    return () => clearInterval(id);
+  }, []);
+  return <MetalProgress tone="silver" value={Math.min(100, value)} style={{ width: 260 }} />;
+}
 
 const TONES: MetalTone[] = ["silver", "gold", "gunmetal", "obsidian"];
 const MARK = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23fff'/%3E%3Cstop offset='.5' stop-color='%23888'/%3E%3Cstop offset='1' stop-color='%23fff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='2' y='2' width='20' height='20' rx='6' fill='url(%23g)'/%3E%3C/svg%3E";
@@ -39,7 +54,8 @@ export function App() {
             <span className="nav-links">
               <a href="#buttons">Buttons</a>
               <a href="#styles">Styles</a>
-              <a href="#cards">Cards</a>
+              <a href="#logo">Logos</a>
+              <a href="#controls">Controls</a>
               <a href="#lab">Lab</a>
               <a href="https://github.com/seangeng/argent">GitHub</a>
               <a href="https://www.npmjs.com/package/argentui">npm</a>
@@ -52,7 +68,7 @@ export function App() {
         {/* Hero */}
         <div className="hero">
           <h1>
-            Liquid <span className="liq">metal</span>
+            Liquid <MetalText tone="silver">metal</MetalText>
             <br />
             for React
           </h1>
@@ -225,6 +241,103 @@ import "argentui/styles.css";
   metalScale={1.4} sheen>
   Full fill — molten gold.
 </Metal>`}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Logo */}
+      <section id="logo">
+        <div className="wrap">
+          <p className="eyebrow">Component</p>
+          <h2>Liquid logos</h2>
+          <p>
+            Pour the metal into any mark — pass an image with a transparent background and it flows
+            inside the silhouette. The classic liquid-metal treatment for logos and monograms.
+          </p>
+          <div className="grid2">
+            <div className="stage">
+              <MetalLogo src={LOGO_SRC} tone="silver" size={170} />
+              <MetalLogo src={LOGO_SRC} tone="gold" size={170} />
+            </div>
+            <CodeBlock
+              code={`import { MetalLogo } from "argentui";
+
+<MetalLogo src="/logo.svg" tone="silver" size={170} />
+<MetalLogo src="/logo.svg" tone="gold" size={170} />`}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Text */}
+      <section id="text">
+        <div className="wrap">
+          <p className="eyebrow">Component</p>
+          <h2>Chrome text</h2>
+          <p>
+            A metallic gradient clipped to the glyphs with a flowing shimmer — pure CSS, no WebGL,
+            so use it at any scale. The hero headline above is this component.
+          </p>
+          <div className="grid2">
+            <div className="stage" style={{ flexDirection: "column", gap: 8 }}>
+              <MetalText as="div" tone="silver" style={{ fontSize: 44, fontWeight: 760, letterSpacing: "-0.03em" }}>
+                Quicksilver
+              </MetalText>
+              <MetalText as="div" tone="gold" style={{ fontSize: 44, fontWeight: 760, letterSpacing: "-0.03em" }}>
+                Solid gold
+              </MetalText>
+              <MetalText as="div" tone="gunmetal" style={{ fontSize: 44, fontWeight: 760, letterSpacing: "-0.03em" }}>
+                Gunmetal grey
+              </MetalText>
+            </div>
+            <CodeBlock
+              code={`import { MetalText } from "argentui";
+
+<MetalText tone="silver">Quicksilver</MetalText>
+<MetalText tone="gold">Solid gold</MetalText>
+<MetalText tone="gunmetal" shimmer={false}>
+  Static chrome
+</MetalText>`}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Controls */}
+      <section id="controls">
+        <div className="wrap">
+          <p className="eyebrow">Components</p>
+          <h2>Controls</h2>
+          <p>
+            A mercury switch — the thumb is a drop of liquid metal that squishes as you press it — a
+            molten progress bar, and metal-rimmed badges.
+          </p>
+          <div className="grid2">
+            <div className="stage" style={{ flexDirection: "column", gap: 22 }}>
+              <div className="row" style={{ justifyContent: "center" }}>
+                <MetalToggle tone="silver" defaultChecked />
+                <MetalToggle tone="gold" />
+                <MetalToggle tone="gunmetal" defaultChecked />
+              </div>
+              <ProgressDemo />
+              <MetalProgress tone="gold" style={{ width: 260 }} />
+              <div className="row" style={{ justifyContent: "center" }}>
+                <MetalBadge tone="silver">v0.2.0</MetalBadge>
+                <MetalBadge tone="gold">Pro</MetalBadge>
+                <MetalBadge tone="gunmetal" tint>Beta</MetalBadge>
+              </div>
+            </div>
+            <CodeBlock
+              code={`import { MetalToggle, MetalProgress, MetalBadge } from "argentui";
+
+<MetalToggle tone="silver" defaultChecked
+  onCheckedChange={setEnabled} />
+
+<MetalProgress tone="silver" value={64} />
+<MetalProgress tone="gold" />  {/* indeterminate */}
+
+<MetalBadge tone="gold">Pro</MetalBadge>`}
             />
           </div>
         </div>

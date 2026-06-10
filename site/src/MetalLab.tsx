@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Metal, type MetalTone, type MetalVariant, type MetalFrame } from "argentui";
+import { Metal, type MetalTone, type MetalVariant, type MetalFrame, type MetalEngine } from "argentui";
 import { CodeBlock } from "./CodeBlock";
 
 const TONES: MetalTone[] = ["silver", "gold", "gunmetal", "obsidian"];
 const VARIANTS: MetalVariant[] = ["border", "fill"];
 const FRAMES: MetalFrame[] = ["single", "double"];
+const ENGINES: MetalEngine[] = ["paper", "native"];
 
 export function MetalLab() {
   const [tone, setTone] = useState<MetalTone>("silver");
@@ -16,6 +17,7 @@ export function MetalLab() {
   const [speed, setSpeed] = useState(1);
   const [metalScale, setMetalScale] = useState(1.1);
   const [sheen, setSheen] = useState(true);
+  const [engine, setEngine] = useState<MetalEngine>("paper");
 
   const showReveal = variant === "border";
   const code = `<Metal
@@ -23,7 +25,7 @@ export function MetalLab() {
   variant="${variant}"${variant === "border" && frame === "double" ? `\n  frame="double"` : ""}${variant === "border" && tint ? "\n  tint" : ""}${showReveal && reveal ? "\n  revealOnHover" : ""}
   radius={${radius}}
   speed={${speed}}
-  metalScale={${metalScale}}${sheen ? "\n  sheen" : ""}
+  metalScale={${metalScale}}${engine === "native" ? `\n  engine="native"` : ""}${sheen ? "\n  sheen" : ""}
 >
   <div style={{ padding: 36 }}>Argent</div>
 </Metal>`;
@@ -37,6 +39,16 @@ export function MetalLab() {
             {TONES.map((t) => (
               <button key={t} data-on={tone === t} onClick={() => setTone(t)}>
                 {t}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="ctl">
+          <label>Engine</label>
+          <div className="seg">
+            {ENGINES.map((e) => (
+              <button key={e} data-on={engine === e} onClick={() => setEngine(e)}>
+                {e}
               </button>
             ))}
           </div>
@@ -110,7 +122,7 @@ export function MetalLab() {
 
       <div>
         <div className="stage lab-stage">
-          <Metal tone={tone} variant={variant} frame={frame} tint={tint} revealOnHover={showReveal && reveal} radius={radius} speed={speed} metalScale={metalScale} sheen={sheen}>
+          <Metal tone={tone} variant={variant} frame={frame} tint={tint} revealOnHover={showReveal && reveal} radius={radius} speed={speed} metalScale={metalScale} engine={engine} sheen={sheen}>
             <div style={{ padding: 40, fontSize: 24, fontWeight: 700, letterSpacing: "-0.03em", minWidth: 220, textAlign: "center" }}>
               Argent
             </div>

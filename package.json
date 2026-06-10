@@ -1,7 +1,7 @@
 {
   "name": "argentui",
-  "version": "0.1.0",
-  "description": "Argent — liquid-metal UI for React. Chrome, gold, and gunmetal surfaces that ripple like mercury, powered by Paper's LiquidMetal WebGL shader. A metal sibling to Glacé.",
+  "version": "0.2.0",
+  "description": "Argent \u2014 liquid-metal UI for React. Chrome, gold, and gunmetal surfaces that ripple like mercury, powered by Paper's LiquidMetal WebGL shader. A metal sibling to Glac\u00e9.",
   "type": "module",
   "license": "MIT",
   "author": "Sean Geng (https://seangeng.com)",
