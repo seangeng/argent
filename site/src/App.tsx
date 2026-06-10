@@ -363,6 +363,7 @@ import "argentui/styles.css";
           <div style={{ display: "flex", gap: 22, flexWrap: "wrap" }}>
             <a href="https://www.npmjs.com/package/argentui">npm i argentui</a>
             <a href="https://github.com/seangeng/argent">GitHub</a>
+            <a href="https://seangeng.com/writing/building-a-liquid-metal-ui-kit">The writeup</a>
             <a href="https://glaceui.com">Glacé (glass sibling)</a>
             <a href="https://seangeng.com">Built by Sean Geng</a>
           </div>
