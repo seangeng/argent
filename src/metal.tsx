@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { LiquidMetal, type LiquidMetalParams } from "@paper-design/shaders-react";
-import { mountMetal, NATIVE_TONES, type MetalEngine, type MetalMount } from "./engine";
+import { mountMetal, NATIVE_TONES, type MetalEngine, type MetalMount, type NativeMetalParams } from "./engine";
 
 /**
  * The liquid-metal surface is Paper's `LiquidMetal` WebGL shader
@@ -93,58 +93,127 @@ export function useInView(ref: React.RefObject<Element | null>, margin = "250px"
   return inView;
 }
 
+/**
+ * Finishes — shader presets tuned to the shape and size of the element. One
+ * pattern does not fit all: a card wants broad flowing bands, a thin progress
+ * bar wants many stripes crossing it, a 22px toggle thumb wants one soft
+ * highlight like a ball bearing, and a hairline badge rim wants dense bands so
+ * a tiny visible slice always catches some light.
+ */
+export type MetalFinish = "surface" | "button" | "bar" | "orb" | "rim";
+
+interface FinishTuning {
+  /** Band direction override (deg). */
+  angle?: number;
+  /** Random per-mount angle variation (±deg) so identical elements don't look cloned. */
+  angleJitter?: number;
+  repetition?: number;
+  softness?: number;
+  distortion?: number;
+  /** Multiplier on the tone's chromatic shift. */
+  shift?: number;
+  /** Default pattern scale. */
+  scale?: number;
+  /** Multiplier on the animation speed. */
+  speed?: number;
+}
+
+export const FINISHES: Record<MetalFinish, FinishTuning> = {
+  /** Cards, nav, panels — broad flowing reflection bands (the tone defaults). */
+  surface: { scale: 1.1 },
+  /** Buttons — slightly spread, calmer warp so labels stay readable. */
+  button: { scale: 1.4, distortion: 0.1 },
+  /** Thin horizontal strips (progress) — near-vertical stripes crossing the bar. */
+  bar: { angle: 14, repetition: 5, softness: 0.3, distortion: 0.06, shift: 0.5, scale: 0.8, speed: 0.75 },
+  /** Small round things (toggle thumbs) — one soft highlight, like a polished sphere. */
+  orb: { angle: 112, angleJitter: 20, repetition: 1.7, softness: 0.5, distortion: 0.05, shift: 0.4, scale: 1.5 },
+  /** Hairline edges (badges, thin borders) — dense bands so any slice sparkles. */
+  rim: { angle: 40, repetition: 4.5, softness: 0.3, distortion: 0.08, shift: 0.5, scale: 0.85, speed: 0.85 },
+};
+
 export interface MetalFillProps {
   tone: MetalTone;
   /** Shader animation speed (0 pauses). */
   speed?: number;
-  /** Pattern scale — higher spreads the bands out. */
+  /** Pattern scale — higher spreads the bands out. Defaults per finish. */
   scale?: number;
   /** `"paper"` (Paper's LiquidMetal, default) or `"native"` (Argent's own shader). */
   engine?: MetalEngine;
+  /** Shape-tuned shader preset. Defaults to `"surface"`. */
+  finish?: MetalFinish;
+  /** Band direction in degrees — overrides the tone/finish default. */
+  angle?: number;
 }
 
 const FILL_STYLE: React.CSSProperties = { position: "absolute", inset: 0, width: "100%", height: "100%" };
 
 /** Argent's own clean-room shader on a plain canvas. */
-function NativeCanvas({ tone, speed, scale }: { tone: MetalTone; speed: number; scale: number }) {
+function NativeCanvas({ params }: { params: NativeMetalParams }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mountRef = useRef<MetalMount | null>(null);
+  const initial = useRef(params);
+  initial.current = params;
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    mountRef.current = mountMetal(canvas, { ...NATIVE_TONES[tone], speed, scale });
+    mountRef.current = mountMetal(canvas, initial.current);
     return () => {
       mountRef.current?.destroy();
       mountRef.current = null;
     };
-    // remount only when the tone changes; speed/scale update in place below
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tone]);
+  }, []);
   useEffect(() => {
-    mountRef.current?.update({ speed, scale });
-  }, [speed, scale]);
+    mountRef.current?.update(params);
+  }, [params]);
   return <canvas ref={canvasRef} style={{ ...FILL_STYLE, display: "block" }} />;
 }
 
 /** The shader canvas, absolutely filling its positioned parent (when in view). */
-export function MetalFill({ tone, speed = 1, scale = 1.1, engine = "paper" }: MetalFillProps) {
+export function MetalFill({ tone, speed = 1, scale, engine = "paper", finish = "surface", angle }: MetalFillProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const mounted = useMounted();
   const inView = useInView(ref);
   const reduced = useReducedMotion();
-  const effSpeed = reduced ? 0 : speed;
+  const f = FINISHES[finish];
+  const [jitter] = useState(() => (f.angleJitter ? (Math.random() * 2 - 1) * f.angleJitter : 0));
+
+  const base = TONE_PARAMS[tone];
+  const effAngle = (angle ?? f.angle ?? base.angle ?? 70) + jitter;
+  const effScale = scale ?? f.scale ?? 1.1;
+  const effSpeed = (reduced ? 0 : speed) * (f.speed ?? 1);
+  const shift = f.shift ?? 1;
+
+  const native = NATIVE_TONES[tone];
+  const nativeParams: NativeMetalParams = {
+    ...native,
+    angle: effAngle,
+    repetition: f.repetition ?? native.repetition,
+    softness: f.softness ?? native.softness,
+    // the native warp amount runs ~3× paper's distortion scale
+    distortion: f.distortion !== undefined ? f.distortion * 3 : native.distortion,
+    dispersion: native.dispersion * shift,
+    speed: effSpeed,
+    scale: effScale,
+  };
+
   return (
     <span ref={ref} aria-hidden="true" style={{ position: "absolute", inset: 0 }}>
       {mounted && inView && (
         engine === "native" ? (
-          <NativeCanvas tone={tone} speed={effSpeed} scale={scale} />
+          <NativeCanvas params={nativeParams} />
         ) : (
           <LiquidMetal
             shape="none"
             fit="cover"
-            scale={scale}
+            scale={effScale}
             speed={effSpeed}
-            {...TONE_PARAMS[tone]}
+            {...base}
+            angle={effAngle}
+            repetition={f.repetition ?? base.repetition}
+            softness={f.softness ?? base.softness}
+            distortion={f.distortion ?? base.distortion}
+            shiftRed={(base.shiftRed ?? 0.3) * shift}
+            shiftBlue={(base.shiftBlue ?? 0.3) * shift}
             style={FILL_STYLE}
           />
         )

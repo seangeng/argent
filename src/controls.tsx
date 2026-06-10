@@ -41,7 +41,7 @@ export const MetalToggle = forwardRef<HTMLButtonElement, MetalToggleProps>(funct
       {...rest}
     >
       <span className="argent-toggle-thumb" aria-hidden="true">
-        <MetalFill tone={tone} scale={2.4} />
+        <MetalFill tone={tone} finish="orb" />
       </span>
     </button>
   );
@@ -79,7 +79,7 @@ export const MetalProgress = forwardRef<HTMLDivElement, MetalProgressProps>(func
         style={indeterminate ? undefined : { width: `${clamped}%` }}
         aria-hidden="true"
       >
-        <MetalFill tone={tone} scale={1.6} />
+        <MetalFill tone={tone} finish="bar" />
       </span>
     </div>
   );
@@ -89,7 +89,7 @@ export interface MetalBadgeProps extends Omit<MetalProps, "as" | "variant"> {}
 
 /** A small liquid-metal pill — a metal rim around a quiet label. */
 export const MetalBadge = forwardRef<HTMLElement, MetalBadgeProps>(function MetalBadge(
-  { className, radius = 999, borderWidth = 1, metalScale = 2.2, ...rest },
+  { className, radius = 999, borderWidth = 1, finish = "rim", ...rest },
   ref,
 ) {
   return (
@@ -99,7 +99,7 @@ export const MetalBadge = forwardRef<HTMLElement, MetalBadgeProps>(function Meta
       variant="border"
       radius={radius}
       borderWidth={borderWidth}
-      metalScale={metalScale}
+      finish={finish}
       className={["argent-badge", className].filter(Boolean).join(" ")}
       {...rest}
     />

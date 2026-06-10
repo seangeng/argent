@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { MetalFill, type MetalTone } from "./metal";
+import { MetalFill, type MetalFinish, type MetalTone } from "./metal";
 import type { MetalEngine } from "./engine";
 import { PRESS_PATTERN, vibrate } from "./haptics";
 
@@ -43,6 +43,10 @@ export interface MetalProps extends React.HTMLAttributes<HTMLElement> {
   metalScale?: number;
   /** Shader engine: Paper's LiquidMetal (default) or Argent's own. */
   engine?: MetalEngine;
+  /** Shape-tuned shader preset. Defaults to `"surface"`. */
+  finish?: MetalFinish;
+  /** Band direction in degrees — overrides the tone/finish default. */
+  angle?: number;
   /** A specular streak that sweeps across on hover. */
   sheen?: boolean;
 }
@@ -69,6 +73,8 @@ export const Metal = forwardRef<HTMLElement, MetalProps>(function Metal(
     speed,
     metalScale,
     engine,
+    finish,
+    angle,
     sheen = false,
     className,
     style,
@@ -96,7 +102,7 @@ export const Metal = forwardRef<HTMLElement, MetalProps>(function Metal(
       {...rest}
     >
       <span className="argent-fill" aria-hidden="true">
-        <MetalFill tone={tone} speed={speed} scale={metalScale} engine={engine} />
+        <MetalFill tone={tone} speed={speed} scale={metalScale} engine={engine} finish={finish} angle={angle} />
       </span>
       {border && <span className="argent-core" aria-hidden="true" />}
       {sheen && <span className="argent-sheen" aria-hidden="true" />}
@@ -129,13 +135,15 @@ export interface MetalButtonProps extends React.ButtonHTMLAttributes<HTMLButtonE
   haptics?: boolean;
   speed?: number;
   engine?: MetalEngine;
+  finish?: MetalFinish;
+  angle?: number;
 }
 
 const SIZE_RADIUS = { sm: 11, md: 13, lg: 15 } as const;
 
 /** A liquid-metal button — readable at rest, molten on hover, with a stamped press. */
 export const MetalButton = forwardRef<HTMLButtonElement, MetalButtonProps>(function MetalButton(
-  { tone = "silver", size = "md", variant = "border", radius, borderWidth = 1.5, revealOnHover = true, haptics = true, speed, engine, type = "button", className, children, style, onPointerDown, ...rest },
+  { tone = "silver", size = "md", variant = "border", radius, borderWidth = 1.5, revealOnHover = true, haptics = true, speed, engine, finish = "button", angle, type = "button", className, children, style, onPointerDown, ...rest },
   ref,
 ) {
   const border = variant === "border";
@@ -153,7 +161,7 @@ export const MetalButton = forwardRef<HTMLButtonElement, MetalButtonProps>(funct
       {...rest}
     >
       <span className="argent-fill" aria-hidden="true">
-        <MetalFill tone={tone} speed={speed} scale={1.4} engine={engine} />
+        <MetalFill tone={tone} speed={speed} engine={engine} finish={finish} angle={angle} />
       </span>
       {border && <span className="argent-core" aria-hidden="true" />}
       <span className="argent-sheen" aria-hidden="true" />

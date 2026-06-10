@@ -112,10 +112,28 @@ The base primitive every component is built on. Render any element via `as`.
 | `borderWidth` | `number` | `1.5` | rim thickness (border variant) |
 | `radius` | `number` | `14` | corner radius (px) |
 | `speed` | `number` | `1` | shader speed (`0` pauses) |
-| `metalScale` | `number` | `1.1` | pattern scale — higher spreads the bands |
+| `finish` | `"surface" \| "button" \| "bar" \| "orb" \| "rim"` | per component | shape-tuned shader preset (see below) |
+| `angle` | `number` | per tone/finish | band direction in degrees |
+| `metalScale` | `number` | per finish | pattern scale — higher spreads the bands |
 | `sheen` | `boolean` | `false` | specular streak on hover |
 
 Theme the border interior with the `--argent-panel` CSS variable.
+
+## Finishes
+
+One shader tuning can't serve every shape — broad bands that look right on a card read as a smear on a 10px progress bar and a sticker on a 22px toggle thumb. Each component defaults to a **finish** preset tuned for its geometry, and you can override it anywhere:
+
+| finish | tuned for | character |
+|--------|-----------|-----------|
+| `surface` | cards, nav, panels | broad flowing reflection bands |
+| `button` | buttons | spread + calmer warp, label stays readable |
+| `bar` | thin strips (progress) | near-vertical stripes crossing the bar |
+| `orb` | small round things (toggle thumbs) | one soft highlight, like a polished sphere — with per-instance angle variation so rows don't look cloned |
+| `rim` | hairline edges (badges) | dense bands so any visible slice catches light |
+
+```tsx
+<Metal tone="silver" finish="rim" angle={120}>…</Metal>
+```
 
 Tune any tone with `TONE_PARAMS`, or drop down to `<MetalFill>` / Paper's `<LiquidMetal>` directly for full control.
 

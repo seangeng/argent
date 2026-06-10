@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Metal, type MetalTone, type MetalVariant, type MetalFrame, type MetalEngine } from "argentui";
+import { Metal, type MetalTone, type MetalVariant, type MetalFrame, type MetalEngine, type MetalFinish } from "argentui";
 import { CodeBlock } from "./CodeBlock";
 
 const TONES: MetalTone[] = ["silver", "gold", "gunmetal", "obsidian"];
 const VARIANTS: MetalVariant[] = ["border", "fill"];
 const FRAMES: MetalFrame[] = ["single", "double"];
 const ENGINES: MetalEngine[] = ["paper", "native"];
+const FINISHES: MetalFinish[] = ["surface", "button", "bar", "orb", "rim"];
 
 export function MetalLab() {
   const [tone, setTone] = useState<MetalTone>("silver");
@@ -18,6 +19,8 @@ export function MetalLab() {
   const [metalScale, setMetalScale] = useState(1.1);
   const [sheen, setSheen] = useState(true);
   const [engine, setEngine] = useState<MetalEngine>("paper");
+  const [finish, setFinish] = useState<MetalFinish>("surface");
+  const [angle, setAngle] = useState<number | null>(null);
 
   const showReveal = variant === "border";
   const code = `<Metal
@@ -25,7 +28,7 @@ export function MetalLab() {
   variant="${variant}"${variant === "border" && frame === "double" ? `\n  frame="double"` : ""}${variant === "border" && tint ? "\n  tint" : ""}${showReveal && reveal ? "\n  revealOnHover" : ""}
   radius={${radius}}
   speed={${speed}}
-  metalScale={${metalScale}}${engine === "native" ? `\n  engine="native"` : ""}${sheen ? "\n  sheen" : ""}
+  metalScale={${metalScale}}${finish !== "surface" ? `\n  finish="${finish}"` : ""}${angle !== null ? `\n  angle={${angle}}` : ""}${engine === "native" ? `\n  engine="native"` : ""}${sheen ? "\n  sheen" : ""}
 >
   <div style={{ padding: 36 }}>Argent</div>
 </Metal>`;
@@ -52,6 +55,27 @@ export function MetalLab() {
               </button>
             ))}
           </div>
+        </div>
+        <div className="ctl">
+          <label>Finish</label>
+          <div className="seg">
+            {FINISHES.map((fi) => (
+              <button key={fi} data-on={finish === fi} onClick={() => setFinish(fi)}>
+                {fi}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="ctl">
+          <label>
+            Angle <b>{angle === null ? "auto" : `${angle}°`}</b>
+          </label>
+          <input type="range" min={0} max={180} value={angle ?? 68} onChange={(e) => setAngle(+e.target.value)} />
+          {angle !== null && (
+            <div className="seg">
+              <button data-on={false} onClick={() => setAngle(null)}>reset to auto</button>
+            </div>
+          )}
         </div>
         <div className="ctl">
           <label>Variant</label>
@@ -122,7 +146,7 @@ export function MetalLab() {
 
       <div>
         <div className="stage lab-stage">
-          <Metal tone={tone} variant={variant} frame={frame} tint={tint} revealOnHover={showReveal && reveal} radius={radius} speed={speed} metalScale={metalScale} engine={engine} sheen={sheen}>
+          <Metal tone={tone} variant={variant} frame={frame} tint={tint} revealOnHover={showReveal && reveal} radius={radius} speed={speed} metalScale={metalScale} engine={engine} finish={finish} angle={angle ?? undefined} sheen={sheen}>
             <div style={{ padding: 40, fontSize: 24, fontWeight: 700, letterSpacing: "-0.03em", minWidth: 220, textAlign: "center" }}>
               Argent
             </div>
