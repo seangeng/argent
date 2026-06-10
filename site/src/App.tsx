@@ -164,6 +164,8 @@ import "argentui/styles.css";
               { label: "Tinted", props: { tint: true } },
               { label: "Double + tint", props: { frame: "double" as const, tint: true } },
               { label: "Thick rim", props: { borderWidth: 4 } },
+              { label: "Halo", props: { halo: true } },
+              { label: "Halo + double", props: { halo: 10, frame: "double" as const } },
             ].map((v) => (
               <MetalCard key={v.label} tone="silver" radius={16} style={{ width: 150 }} {...v.props}>
                 <div style={{ padding: "26px 10px", textAlign: "center", fontWeight: 640, fontSize: 14 }}>
@@ -178,7 +180,9 @@ import "argentui/styles.css";
 <MetalCard tone="silver" frame="double" />        // double frame
 <MetalCard tone="silver" tint />                  // metal shows through
 <MetalCard tone="silver" frame="double" tint />   // both
-<MetalCard tone="silver" borderWidth={4} />       // thick rim`}
+<MetalCard tone="silver" borderWidth={4} />       // thick rim
+<MetalCard tone="silver" halo />                  // frosted standoff ring
+<MetalCard tone="silver" halo={10} frame="double" />`}
             />
           </div>
         </div>

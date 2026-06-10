@@ -49,10 +49,23 @@ export interface MetalProps extends React.HTMLAttributes<HTMLElement> {
   angle?: number;
   /** A specular streak that sweeps across on hover. */
   sheen?: boolean;
+  /**
+   * A frosted standoff ring outside the metal — a few px of backdrop blur
+   * finished with a ~5% hairline. `true` for 8px, or a number for the ring
+   * width. Theme the line with `--argent-halo-line`.
+   */
+  halo?: boolean | number;
 }
 
-function buildVars(radius: number, borderWidth: number, style?: React.CSSProperties): StyleVars {
-  return { borderRadius: radius, "--argent-bw": `${borderWidth}px`, ...style } as StyleVars;
+function buildVars(radius: number, borderWidth: number, halo: boolean | number, style?: React.CSSProperties): StyleVars {
+  const vars: StyleVars = {
+    borderRadius: radius,
+    "--argent-bw": `${borderWidth}px`,
+    "--argent-radius": `${radius}px`,
+    ...style,
+  } as StyleVars;
+  if (halo) vars["--argent-halo"] = `${halo === true ? 8 : halo}px`;
+  return vars;
 }
 
 /**
@@ -76,6 +89,7 @@ export const Metal = forwardRef<HTMLElement, MetalProps>(function Metal(
     finish,
     angle,
     sheen = false,
+    halo = false,
     className,
     style,
     children,
@@ -95,10 +109,11 @@ export const Metal = forwardRef<HTMLElement, MetalProps>(function Metal(
         border && tint && "argent--tint",
         revealOnHover && "argent--reveal",
         sheen && "argent--sheen",
+        !!halo && "argent--halo",
         className,
       )}
       data-tone={tone}
-      style={buildVars(radius, borderWidth, style)}
+      style={buildVars(radius, borderWidth, halo, style)}
       {...rest}
     >
       <span className="argent-fill" aria-hidden="true">
@@ -137,13 +152,14 @@ export interface MetalButtonProps extends React.ButtonHTMLAttributes<HTMLButtonE
   engine?: MetalEngine;
   finish?: MetalFinish;
   angle?: number;
+  halo?: boolean | number;
 }
 
 const SIZE_RADIUS = { sm: 11, md: 13, lg: 15 } as const;
 
 /** A liquid-metal button — readable at rest, molten on hover, with a stamped press. */
 export const MetalButton = forwardRef<HTMLButtonElement, MetalButtonProps>(function MetalButton(
-  { tone = "silver", size = "md", variant = "border", radius, borderWidth = 1.5, revealOnHover = true, haptics = true, speed, engine, finish = "button", angle, type = "button", className, children, style, onPointerDown, ...rest },
+  { tone = "silver", size = "md", variant = "border", radius, borderWidth = 1.5, revealOnHover = true, haptics = true, speed, engine, finish = "button", angle, halo = false, type = "button", className, children, style, onPointerDown, ...rest },
   ref,
 ) {
   const border = variant === "border";
@@ -155,9 +171,9 @@ export const MetalButton = forwardRef<HTMLButtonElement, MetalButtonProps>(funct
         if (haptics) vibrate(PRESS_PATTERN);
         onPointerDown?.(e);
       }}
-      className={cx("argent", border ? "argent--border" : "argent--fill", border && revealOnHover && "argent--reveal", "argent--sheen", "argent-btn", `argent-btn--${size}`, className)}
+      className={cx("argent", border ? "argent--border" : "argent--fill", border && revealOnHover && "argent--reveal", "argent--sheen", !!halo && "argent--halo", "argent-btn", `argent-btn--${size}`, className)}
       data-tone={tone}
-      style={buildVars(radius ?? SIZE_RADIUS[size], borderWidth, style)}
+      style={buildVars(radius ?? SIZE_RADIUS[size], borderWidth, halo, style)}
       {...rest}
     >
       <span className="argent-fill" aria-hidden="true">

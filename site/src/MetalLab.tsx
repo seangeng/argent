@@ -18,6 +18,7 @@ export function MetalLab() {
   const [speed, setSpeed] = useState(1);
   const [metalScale, setMetalScale] = useState(1.1);
   const [sheen, setSheen] = useState(true);
+  const [halo, setHalo] = useState(false);
   const [engine, setEngine] = useState<MetalEngine>("paper");
   const [finish, setFinish] = useState<MetalFinish>("surface");
   const [angle, setAngle] = useState<number | null>(null);
@@ -28,7 +29,7 @@ export function MetalLab() {
   variant="${variant}"${variant === "border" && frame === "double" ? `\n  frame="double"` : ""}${variant === "border" && tint ? "\n  tint" : ""}${showReveal && reveal ? "\n  revealOnHover" : ""}
   radius={${radius}}
   speed={${speed}}
-  metalScale={${metalScale}}${finish !== "surface" ? `\n  finish="${finish}"` : ""}${angle !== null ? `\n  angle={${angle}}` : ""}${engine === "native" ? `\n  engine="native"` : ""}${sheen ? "\n  sheen" : ""}
+  metalScale={${metalScale}}${finish !== "surface" ? `\n  finish="${finish}"` : ""}${angle !== null ? `\n  angle={${angle}}` : ""}${engine === "native" ? `\n  engine="native"` : ""}${halo ? "\n  halo" : ""}${sheen ? "\n  sheen" : ""}
 >
   <div style={{ padding: 36 }}>Argent</div>
 </Metal>`;
@@ -136,6 +137,13 @@ export function MetalLab() {
           <input type="range" min={0.4} max={2.4} step={0.1} value={metalScale} onChange={(e) => setMetalScale(+e.target.value)} />
         </div>
         <div className="ctl">
+          <label>Halo</label>
+          <div className="seg">
+            <button data-on={halo} onClick={() => setHalo(true)}>on</button>
+            <button data-on={!halo} onClick={() => setHalo(false)}>off</button>
+          </div>
+        </div>
+        <div className="ctl">
           <label>Sheen</label>
           <div className="seg">
             <button data-on={sheen} onClick={() => setSheen(true)}>on</button>
@@ -146,7 +154,7 @@ export function MetalLab() {
 
       <div>
         <div className="stage lab-stage">
-          <Metal tone={tone} variant={variant} frame={frame} tint={tint} revealOnHover={showReveal && reveal} radius={radius} speed={speed} metalScale={metalScale} engine={engine} finish={finish} angle={angle ?? undefined} sheen={sheen}>
+          <Metal tone={tone} variant={variant} frame={frame} tint={tint} revealOnHover={showReveal && reveal} radius={radius} speed={speed} metalScale={metalScale} engine={engine} finish={finish} angle={angle ?? undefined} halo={halo} sheen={sheen}>
             <div style={{ padding: 40, fontSize: 24, fontWeight: 700, letterSpacing: "-0.03em", minWidth: 220, textAlign: "center" }}>
               Argent
             </div>

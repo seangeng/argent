@@ -113,6 +113,7 @@ The base primitive every component is built on. Render any element via `as`.
 | `radius` | `number` | `14` | corner radius (px) |
 | `speed` | `number` | `1` | shader speed (`0` pauses) |
 | `finish` | `"surface" \| "button" \| "bar" \| "orb" \| "rim"` | per component | shape-tuned shader preset (see below) |
+| `halo` | `boolean \| number` | `false` | frosted standoff ring outside the metal — a few px of backdrop blur finished with a ~5% hairline (`true` = 8px; theme the line with `--argent-halo-line`) |
 | `angle` | `number` | per tone/finish | band direction in degrees |
 | `metalScale` | `number` | per finish | pattern scale — higher spreads the bands |
 | `sheen` | `boolean` | `false` | specular streak on hover |
