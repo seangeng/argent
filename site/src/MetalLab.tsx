@@ -69,14 +69,17 @@ export function MetalLab() {
         </div>
         <div className="ctl">
           <label>
-            Angle <b>{angle === null ? "auto" : `${angle}°`}</b>
+            Angle{" "}
+            <b>
+              {angle === null ? "auto" : `${angle}°`}
+              {angle !== null && (
+                <button className="mini-reset" onClick={() => setAngle(null)} aria-label="Reset angle to auto">
+                  ×
+                </button>
+              )}
+            </b>
           </label>
           <input type="range" min={0} max={180} value={angle ?? 68} onChange={(e) => setAngle(+e.target.value)} />
-          {angle !== null && (
-            <div className="seg">
-              <button data-on={false} onClick={() => setAngle(null)}>reset to auto</button>
-            </div>
-          )}
         </div>
         <div className="ctl">
           <label>Variant</label>

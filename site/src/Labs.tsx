@@ -21,7 +21,7 @@ export function EffectsDemo() {
   return (
     <div>
       <div className="stage" style={{ flexDirection: "column", gap: 18 }}>
-        <Metal key={`${effect}-${tone}`} tone={tone} variant="fill" radius={24} effect={effect} metalScale={1.4} sheen>
+        <Metal tone={tone} variant="fill" radius={24} effect={effect} metalScale={1.4} sheen>
           <div style={{ padding: "44px 56px", fontSize: 20, fontWeight: 700, color: "#fff", textShadow: "0 1px 3px rgba(0,0,0,0.9), 0 0 10px rgba(0,0,0,0.6)" }}>
             {effect}
           </div>
@@ -100,7 +100,7 @@ export function LogoLab() {
   return (
     <div>
       <div className="stage" style={{ flexDirection: "column", gap: 18 }}>
-        <MetalLogo key={`${src.length}-${tone}`} src={src} tone={tone} size={180} />
+        <MetalLogo src={src} tone={tone} size={180} />
         <div className="seg" style={{ justifyContent: "center" }}>
           {BRANDS.map((b) => (
             <button key={b.name} data-on={active === b.name} onClick={() => pick(b.name, b.slug)}>
@@ -176,6 +176,14 @@ async function loadGoogleFont(family: string, weight: number): Promise<LoadedFon
 export function TextLab() {
   const [input, setInput] = useState("Argent");
   const [text, setText] = useState("Argent");
+
+  // live preview: pour as you type (debounced), Enter/button for instant
+  useEffect(() => {
+    const t = setTimeout(() => {
+      if (input.trim()) setText(input.trim());
+    }, 450);
+    return () => clearTimeout(t);
+  }, [input]);
   const [fontPick, setFontPick] = useState("Playfair Display");
   const [tone, setTone] = useState<MetalTone>("silver");
   const [outline, setOutline] = useState(false);
@@ -207,7 +215,6 @@ export function TextLab() {
       <div className="stage" style={{ flexDirection: "column", gap: 18 }}>
         <div style={{ minHeight: 96, display: "flex", alignItems: "center" }}>
           <MetalText
-            key={`${text}-${tone}-${outline}-${font?.family ?? "sys"}`}
             shader
             tone={tone}
             fontSize={Math.max(34, 76 - text.length * 2.4)}
@@ -233,8 +240,8 @@ export function TextLab() {
         </div>
         <div className="seg" style={{ justifyContent: "center" }}>
           {GOOGLE_FONTS.map((f) => (
-            <button key={f} data-on={fontPick === f} onClick={() => setFontPick(f)}>
-              {f}
+            <button key={f} data-on={fontPick === f} disabled={loading && fontPick !== f} onClick={() => setFontPick(f)}>
+              {loading && fontPick === f ? "…" : f}
             </button>
           ))}
         </div>

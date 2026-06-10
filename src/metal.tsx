@@ -46,8 +46,9 @@ export function useStaggeredMount(): boolean {
   useEffect(() => {
     let alive = true;
     imageMountQueue = imageMountQueue.then(async () => {
-      if (alive) setGo(true);
-      await new Promise((r) => setTimeout(r, 500));
+      if (!alive) return; // unmounted while queued — release the queue instantly
+      setGo(true);
+      await new Promise((r) => setTimeout(r, 300));
     });
     return () => {
       alive = false;

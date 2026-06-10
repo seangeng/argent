@@ -12,7 +12,10 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+section { scroll-margin-top: 90px; }
 body {
   margin: 0;
   background: var(--bg);
@@ -56,7 +59,7 @@ body::before {
 .nav .argent-content { width: 100%; padding: 10px 16px; }
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.02em; color: #f1f2f4; }
 .brand-mark { width: 22px; height: 22px; border-radius: 7px; }
-.nav-links { display: flex; align-items: center; gap: 18px; font-size: 13.5px; }
+.nav-links { display: flex; align-items: center; gap: 18px; font-size: 13.5px; flex-wrap: wrap; justify-content: flex-end; row-gap: 4px; }
 .nav-links a { color: #c4c8ce; text-decoration: none; font-weight: 600; }
 .nav-links a:hover { color: #fff; }
 
@@ -178,11 +181,17 @@ section > .wrap > p { color: var(--ink-2); max-width: 660px; margin: 0 0 26px; }
 .controls { display: flex; flex-direction: column; gap: 18px; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 20px; }
 .ctl { display: flex; flex-direction: column; gap: 8px; }
 .ctl label { font-size: 12.5px; color: var(--ink-2); display: flex; justify-content: space-between; }
-.ctl label b { color: var(--ink); font-family: var(--mono); font-weight: 500; }
+.ctl label b { color: var(--ink); font-family: var(--mono); font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+.mini-reset { border: 1px solid var(--line-2); background: transparent; color: var(--ink-2); border-radius: 6px; width: 18px; height: 18px; line-height: 1; font-size: 12px; cursor: pointer; padding: 0; }
+.mini-reset:hover { color: var(--ink); border-color: var(--ink-3); }
 .ctl input[type="range"] { width: 100%; accent-color: #c8ccd2; }
 .seg { display: flex; gap: 6px; flex-wrap: wrap; }
-.seg button { flex: 1; min-width: 56px; border: 1px solid var(--line-2); background: transparent; color: var(--ink-2); border-radius: 8px; padding: 7px 8px; font: inherit; font-size: 12px; cursor: pointer; }
+.seg button { flex: 1; min-width: 56px; border: 1px solid var(--line-2); background: transparent; color: var(--ink-2); border-radius: 8px; padding: 7px 8px; font: inherit; font-size: 12px; cursor: pointer; transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease; }
+.seg button:hover { color: var(--ink); border-color: var(--ink-3); }
+.seg button:focus-visible { outline: 2px solid var(--ink-3); outline-offset: 1px; }
+.seg button:disabled { opacity: 0.4; cursor: default; }
 .seg button[data-on="true"] { background: #e9ebef; color: #111; border-color: #e9ebef; font-weight: 600; }
+.seg button[data-on="true"]:hover { background: #fff; color: #111; }
 .lab-stage { min-height: 280px; }
 
 /* ── Lab inputs ───────────────────────────────────────────────────────── */

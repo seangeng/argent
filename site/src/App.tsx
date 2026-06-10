@@ -7,7 +7,11 @@ import { EffectsDemo, LogoLab, TextLab } from "./Labs";
 function ProgressDemo() {
   const [value, setValue] = useState(12);
   useEffect(() => {
-    const id = setInterval(() => setValue((v) => (v >= 100 ? 8 : v + Math.random() * 16)), 900);
+    // fill steadily, rest at full, then start over — no jarring wrap
+    const id = setInterval(
+      () => setValue((v) => (v >= 118 ? 6 : v + 7 + Math.random() * 8)),
+      700,
+    );
     return () => clearInterval(id);
   }, []);
   return <MetalProgress tone="silver" value={Math.min(100, value)} style={{ width: 260 }} />;
@@ -269,9 +273,9 @@ import "argentui/styles.css";
           <div className="grid2">
             <div className="stage" style={{ flexDirection: "column", gap: 22 }}>
               <div className="row" style={{ justifyContent: "center" }}>
-                <MetalToggle tone="silver" defaultChecked />
-                <MetalToggle tone="gold" />
-                <MetalToggle tone="gunmetal" defaultChecked />
+                <MetalToggle tone="silver" defaultChecked aria-label="Silver toggle demo" />
+                <MetalToggle tone="gold" aria-label="Gold toggle demo" />
+                <MetalToggle tone="gunmetal" defaultChecked aria-label="Gunmetal toggle demo" />
               </div>
               <ProgressDemo />
               <MetalProgress tone="gold" style={{ width: 260 }} />
