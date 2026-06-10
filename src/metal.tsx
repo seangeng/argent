@@ -131,6 +131,37 @@ export const FINISHES: Record<MetalFinish, FinishTuning> = {
   rim: { angle: 40, repetition: 4.5, softness: 0.3, distortion: 0.08, shift: 0.5, scale: 0.85, speed: 0.85 },
 };
 
+/**
+ * Effects — the character of the liquid's motion, independent of tone and
+ * finish: how soft the bands are, how hard the noise churns them, how fast
+ * everything moves.
+ */
+export type MetalEffect = "flow" | "molten" | "ripple" | "chrome" | "wave";
+
+interface EffectTuning {
+  angle?: number;
+  repetition?: number;
+  softness?: number;
+  distortion?: number;
+  /** Multiplier on chromatic shift. */
+  shift?: number;
+  /** Multiplier on animation speed. */
+  speed?: number;
+}
+
+export const EFFECTS: Record<MetalEffect, EffectTuning> = {
+  /** The default — steady flowing reflection bands. */
+  flow: {},
+  /** Slow, heavy, half-melted — soft wide bands churning lazily. */
+  molten: { softness: 0.5, distortion: 0.3, speed: 0.45, shift: 0.6 },
+  /** Agitated surface — tighter bands, hard noise, quick motion. */
+  ripple: { repetition: 4, softness: 0.24, distortion: 0.5, speed: 1.4 },
+  /** Mirror-polished — crisp hard bands, strong chromatic fringe, calm. */
+  chrome: { softness: 0.05, distortion: 0.05, shift: 1.6, speed: 0.8 },
+  /** Horizontal swells rolling through the surface. */
+  wave: { angle: 0, repetition: 5, softness: 0.36, distortion: 0.18, speed: 0.7 },
+};
+
 export interface MetalFillProps {
   tone: MetalTone;
   /** Shader animation speed (0 pauses). */
@@ -141,6 +172,8 @@ export interface MetalFillProps {
   engine?: MetalEngine;
   /** Shape-tuned shader preset. Defaults to `"surface"`. */
   finish?: MetalFinish;
+  /** Motion character preset. Defaults to `"flow"`. */
+  effect?: MetalEffect;
   /** Band direction in degrees — overrides the tone/finish default. */
   angle?: number;
 }
@@ -169,28 +202,33 @@ function NativeCanvas({ params }: { params: NativeMetalParams }) {
 }
 
 /** The shader canvas, absolutely filling its positioned parent (when in view). */
-export function MetalFill({ tone, speed = 1, scale, engine = "paper", finish = "surface", angle }: MetalFillProps) {
+export function MetalFill({ tone, speed = 1, scale, engine = "paper", finish = "surface", effect = "flow", angle }: MetalFillProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const mounted = useMounted();
   const inView = useInView(ref);
   const reduced = useReducedMotion();
   const f = FINISHES[finish];
+  const e = EFFECTS[effect];
   const [jitter] = useState(() => (f.angleJitter ? (Math.random() * 2 - 1) * f.angleJitter : 0));
 
   const base = TONE_PARAMS[tone];
-  const effAngle = (angle ?? f.angle ?? base.angle ?? 70) + jitter;
+  // precedence: explicit prop > effect > finish > tone
+  const effAngle = (angle ?? e.angle ?? f.angle ?? base.angle ?? 70) + jitter;
   const effScale = scale ?? f.scale ?? 1.1;
-  const effSpeed = (reduced ? 0 : speed) * (f.speed ?? 1);
-  const shift = f.shift ?? 1;
+  const effSpeed = (reduced ? 0 : speed) * (f.speed ?? 1) * (e.speed ?? 1);
+  const shift = (f.shift ?? 1) * (e.shift ?? 1);
+  const repetition = e.repetition ?? f.repetition ?? base.repetition;
+  const softness = e.softness ?? f.softness ?? base.softness;
+  const distortion = e.distortion ?? f.distortion ?? base.distortion;
 
   const native = NATIVE_TONES[tone];
   const nativeParams: NativeMetalParams = {
     ...native,
     angle: effAngle,
-    repetition: f.repetition ?? native.repetition,
-    softness: f.softness ?? native.softness,
+    repetition: repetition ?? native.repetition,
+    softness: softness ?? native.softness,
     // the native warp amount runs ~3× paper's distortion scale
-    distortion: f.distortion !== undefined ? f.distortion * 3 : native.distortion,
+    distortion: distortion !== undefined ? distortion * 3 : native.distortion,
     dispersion: native.dispersion * shift,
     speed: effSpeed,
     scale: effScale,
@@ -209,9 +247,9 @@ export function MetalFill({ tone, speed = 1, scale, engine = "paper", finish = "
             speed={effSpeed}
             {...base}
             angle={effAngle}
-            repetition={f.repetition ?? base.repetition}
-            softness={f.softness ?? base.softness}
-            distortion={f.distortion ?? base.distortion}
+            repetition={repetition}
+            softness={softness}
+            distortion={distortion}
             shiftRed={(base.shiftRed ?? 0.3) * shift}
             shiftBlue={(base.shiftBlue ?? 0.3) * shift}
             style={FILL_STYLE}

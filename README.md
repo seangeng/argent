@@ -71,7 +71,7 @@ Metal type. By default a chrome gradient clipped to the glyphs (pure CSS, free a
 <MetalText tone="gold" style={{ fontSize: 64 }}>Solid gold</MetalText>  // CSS mode
 ```
 
-> Shader mode renders the glyphs into an SVG silhouette, so it sees **system fonts only** — webfonts won't resolve inside it. The CSS gradient stands in until the shader loads (and wherever WebGL is unavailable).
+> Shader mode renders the glyphs into an SVG silhouette, which sees system fonts only by default. To use a webfont (e.g. Google Fonts), pass `fontCss` with an `@font-face` whose `src` is a **data: URI** — it gets embedded in the silhouette and renders correctly (the [argentui.com](https://argentui.com) text lab does exactly this). The CSS gradient stands in until the shader loads, and wherever WebGL is unavailable.
 
 ### `<MetalLogo>`
 Pour the metal into any mark — pass an image with a transparent background and it flows inside the silhouette.
@@ -113,6 +113,7 @@ The base primitive every component is built on. Render any element via `as`.
 | `radius` | `number` | `14` | corner radius (px) |
 | `speed` | `number` | `1` | shader speed (`0` pauses) |
 | `finish` | `"surface" \| "button" \| "bar" \| "orb" \| "rim"` | per component | shape-tuned shader preset (see below) |
+| `effect` | `"flow" \| "molten" \| "ripple" \| "chrome" \| "wave"` | `"flow"` | the liquid's motion character — from mirror-still chrome to a heavy molten churn |
 | `halo` | `boolean \| number` | `false` | frosted standoff ring outside the metal — a few px of backdrop blur finished with a ~5% hairline (`true` = 8px; theme the line with `--argent-halo-line`) |
 | `angle` | `number` | per tone/finish | band direction in degrees |
 | `metalScale` | `number` | per finish | pattern scale — higher spreads the bands |

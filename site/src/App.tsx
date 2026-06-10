@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react";
-import { Metal, MetalCard, MetalButton, MetalText, MetalLogo, MetalToggle, MetalProgress, MetalBadge, type MetalTone } from "argentui";
+import { Metal, MetalCard, MetalButton, MetalText, MetalToggle, MetalProgress, MetalBadge, type MetalTone } from "argentui";
 import { CodeBlock } from "./CodeBlock";
 import { MetalLab } from "./MetalLab";
-
-const LOGO_SRC =
-  "data:image/svg+xml," +
-  encodeURIComponent(
-    `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><text x='100' y='162' font-size='190' font-family='Helvetica, Arial, sans-serif' font-weight='800' text-anchor='middle' fill='#000'>A</text></svg>`,
-  );
+import { EffectsDemo, LogoLab, TextLab } from "./Labs";
 
 function ProgressDemo() {
   const [value, setValue] = useState(12);
@@ -225,28 +220,11 @@ import "argentui/styles.css";
           <h2>The Metal surface</h2>
           <p>
             <code style={{ fontFamily: "var(--mono)", fontSize: 14 }}>&lt;Metal&gt;</code> is the
-            base every component is built on. Render any element with <code style={{ fontFamily: "var(--mono)", fontSize: 14 }}>as</code>,
-            pick a tone, and choose <code style={{ fontFamily: "var(--mono)", fontSize: 14 }}>variant="border"</code> (default)
-            or <code style={{ fontFamily: "var(--mono)", fontSize: 14 }}>"fill"</code> for the full molten surface.
+            base every component is built on — render any element, pick a tone, and choose an{" "}
+            <code style={{ fontFamily: "var(--mono)", fontSize: 14 }}>effect</code>: the character
+            of the liquid's motion, from mirror-still chrome to a heavy molten churn.
           </p>
-          <div className="grid2">
-            <div className="stage">
-              <Metal as="div" tone="gold" variant="fill" radius={24} sheen metalScale={1.4}>
-                <div style={{ padding: 28, fontSize: 18, fontWeight: 700, maxWidth: 240, textShadow: "0 1px 6px rgba(0,0,0,0.4)" }}>
-                  Full fill — molten gold.
-                </div>
-              </Metal>
-            </div>
-            <CodeBlock
-              code={`import { Metal } from "argentui";
-
-<Metal as="div" tone="gold"
-  variant="fill" radius={24}
-  metalScale={1.4} sheen>
-  Full fill — molten gold.
-</Metal>`}
-            />
-          </div>
+          <EffectsDemo />
         </div>
       </section>
 
@@ -259,18 +237,7 @@ import "argentui/styles.css";
             Pour the metal into any mark — pass an image with a transparent background and it flows
             inside the silhouette. The classic liquid-metal treatment for logos and monograms.
           </p>
-          <div className="grid2">
-            <div className="stage">
-              <MetalLogo src={LOGO_SRC} tone="silver" size={170} />
-              <MetalLogo src={LOGO_SRC} tone="gold" size={170} />
-            </div>
-            <CodeBlock
-              code={`import { MetalLogo } from "argentui";
-
-<MetalLogo src="/logo.svg" tone="silver" size={170} />
-<MetalLogo src="/logo.svg" tone="gold" size={170} />`}
-            />
-          </div>
+          <LogoLab />
         </div>
       </section>
 
@@ -286,32 +253,7 @@ import "argentui/styles.css";
             run the metal around the edges over a dark or gradient interior. Without either you
             get the CSS chrome gradient (zero cost, any scale — the hero headline is the CSS mode).
           </p>
-          <div className="grid2">
-            <div className="stage" style={{ flexDirection: "column", gap: 14 }}>
-              <MetalText shader tone="silver" fontSize={60}>Argent</MetalText>
-              <MetalText shader variant="outline" tone="silver" fontSize={60} fillGradient={["#23262c", "#0a0b0d"]}>
-                Argent
-              </MetalText>
-              <MetalText shader variant="outline" tone="gold" fontSize={60} fill="#141002">
-                Argent
-              </MetalText>
-            </div>
-            <CodeBlock
-              code={`import { MetalText } from "argentui";
-
-// metal floods the glyphs
-<MetalText shader tone="silver">Argent</MetalText>
-
-// metal edges, dark gradient inside
-<MetalText shader variant="outline"
-  fillGradient={["#23262c", "#0a0b0d"]}>
-  Argent
-</MetalText>
-
-// CSS chrome gradient — free, any scale
-<MetalText tone="gunmetal">Quicksilver</MetalText>`}
-            />
-          </div>
+          <TextLab />
         </div>
       </section>
 

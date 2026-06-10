@@ -185,6 +185,32 @@ section > .wrap > p { color: var(--ink-2); max-width: 660px; margin: 0 0 26px; }
 .seg button[data-on="true"] { background: #e9ebef; color: #111; border-color: #e9ebef; font-weight: 600; }
 .lab-stage { min-height: 280px; }
 
+/* ── Lab inputs ───────────────────────────────────────────────────────── */
+.text-input {
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  border-radius: 10px;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  padding: 9px 14px;
+  min-width: 220px;
+  outline: none;
+}
+.text-input:focus { border-color: var(--ink-3); }
+.pour {
+  border: 0;
+  border-radius: 10px;
+  padding: 9px 16px;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  background: #e9ebef;
+  color: #111;
+  cursor: pointer;
+}
+.pour:hover { background: #fff; }
+
 /* ── Footer ───────────────────────────────────────────────────────────── */
 footer { border-top: 1px solid var(--line); padding: 40px 0 64px; color: var(--ink-3); font-size: 14px; }
 footer a { color: var(--ink-2); text-decoration: none; }

@@ -36,9 +36,17 @@ export interface MetalTextProps extends React.HTMLAttributes<HTMLElement> {
   fontWeight?: number;
   /**
    * Font for the silhouette (shader mode). Rendered inside an SVG image, which
-   * can only see system fonts — webfonts won't resolve there.
+   * sees system fonts only — to use a webfont, pass `fontCss` with a
+   * data-URI @font-face for the same family.
    */
   fontFamily?: string;
+  /**
+   * Raw CSS embedded in the glyph SVG (shader mode) — typically a @font-face
+   * whose `src` is a data: URI, which lets webfonts (e.g. Google Fonts) render
+   * inside the silhouette. Load the same face into `document.fonts` so the
+   * width measurement matches.
+   */
+  fontCss?: string;
   /** Shader animation speed (0 pauses). */
   speed?: number;
 }
@@ -52,10 +60,12 @@ interface GlyphGeom {
   fontSize: number;
   fontWeight: number;
   fontFamily: string;
+  fontCss?: string;
 }
 
 function svgOpen(g: GlyphGeom): string {
-  return `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${g.w} ${g.h}' width='${g.w}' height='${g.h}'>`;
+  const style = g.fontCss ? `<style>${g.fontCss}</style>` : "";
+  return `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${g.w} ${g.h}' width='${g.w}' height='${g.h}'>${style}`;
 }
 
 function svgText(g: GlyphGeom, attrs: string): string {
@@ -96,6 +106,7 @@ function ShaderText({
   fontSize,
   fontWeight,
   fontFamily,
+  fontCss,
   speed,
   shimmer,
   className,
@@ -111,6 +122,7 @@ function ShaderText({
   fontSize: number;
   fontWeight: number;
   fontFamily: string;
+  fontCss?: string;
   speed: number;
   shimmer: boolean;
 } & React.HTMLAttributes<HTMLElement>) {
@@ -125,19 +137,31 @@ function ShaderText({
   const ow = outlineWidth ?? Math.max(2, Math.round(fontSize * 0.05));
 
   useEffect(() => {
-    const ctx = document.createElement("canvas").getContext("2d");
-    if (!ctx) return;
-    ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
-    const m = ctx.measureText(text);
-    setGeom({
-      text,
-      w: Math.ceil(m.width + fontSize * 0.24 + ow * 2),
-      h: Math.ceil(fontSize * 1.3 + ow),
-      fontSize,
-      fontWeight,
-      fontFamily,
-    });
-  }, [text, fontSize, fontWeight, fontFamily, ow]);
+    let alive = true;
+    const fontSpec = `${fontWeight} ${fontSize}px ${fontFamily}`;
+    const measure = () => {
+      if (!alive) return;
+      const ctx = document.createElement("canvas").getContext("2d");
+      if (!ctx) return;
+      ctx.font = fontSpec;
+      const m = ctx.measureText(text);
+      setGeom({
+        text,
+        w: Math.ceil(m.width + fontSize * 0.24 + ow * 2),
+        h: Math.ceil(fontSize * 1.3 + ow),
+        fontSize,
+        fontWeight,
+        fontFamily,
+        fontCss,
+      });
+    };
+    // wait for webfonts so the measured width matches the silhouette
+    if (document.fonts?.load) document.fonts.load(fontSpec, text).then(measure, measure);
+    else measure();
+    return () => {
+      alive = false;
+    };
+  }, [text, fontSize, fontWeight, fontFamily, fontCss, ow]);
 
   const ready = mounted && inView && turn && geom;
   const { colorBack: _drop, ...params } = TONE_PARAMS[tone];
@@ -221,6 +245,7 @@ export const MetalText = forwardRef<HTMLElement, MetalTextProps>(function MetalT
     fontSize = 64,
     fontWeight = 800,
     fontFamily = DEFAULT_STACK,
+    fontCss,
     speed = 1,
     className,
     children,
@@ -240,6 +265,7 @@ export const MetalText = forwardRef<HTMLElement, MetalTextProps>(function MetalT
         fontSize={fontSize}
         fontWeight={fontWeight}
         fontFamily={fontFamily}
+        fontCss={fontCss}
         speed={speed}
         shimmer={shimmer}
         className={className}

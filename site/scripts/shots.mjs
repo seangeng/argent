@@ -50,6 +50,11 @@ await page.screenshot({ path: `${OG}/hero.png`, clip: { x: 0, y: 0, width: 1440,
 
 await shot("#buttons .stage", `${OUT}/buttons.png`);
 await shot("#styles .stage", `${OUT}/styles.png`);
+await shot("#primitive .stage", `${OUT}/effects.png`);
+
+// swap the logo lab to a real brand mark before capturing
+await page.locator("#logo .seg button", { hasText: /^GitHub$/ }).click();
+await page.waitForTimeout(2200);
 await shot("#logo .stage", `${OUT}/logos.png`);
 await shot("#text .stage", `${OUT}/text.png`);
 await shot("#controls .stage", `${OUT}/controls.png`);
