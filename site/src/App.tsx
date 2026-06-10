@@ -274,31 +274,31 @@ import "argentui/styles.css";
       <section id="text">
         <div className="wrap">
           <p className="eyebrow">Component</p>
-          <h2>Chrome text</h2>
+          <h2>Metal type</h2>
           <p>
-            A metallic gradient clipped to the glyphs with a flowing shimmer — pure CSS, no WebGL,
-            so use it at any scale. The hero headline above is this component.
+            Pass <code style={{ fontFamily: "var(--mono)", fontSize: 14 }}>shader</code> and the
+            liquid metal pours into the letterforms — flowing bands, liquid edges, chromatic
+            fringe. Without it you get the CSS chrome gradient (zero cost, any scale — the hero
+            headline above is the CSS mode).
           </p>
           <div className="grid2">
-            <div className="stage" style={{ flexDirection: "column", gap: 8 }}>
-              <MetalText as="div" tone="silver" style={{ fontSize: 44, fontWeight: 760, letterSpacing: "-0.03em" }}>
-                Quicksilver
-              </MetalText>
-              <MetalText as="div" tone="gold" style={{ fontSize: 44, fontWeight: 760, letterSpacing: "-0.03em" }}>
-                Solid gold
-              </MetalText>
-              <MetalText as="div" tone="gunmetal" style={{ fontSize: 44, fontWeight: 760, letterSpacing: "-0.03em" }}>
-                Gunmetal grey
+            <div className="stage" style={{ flexDirection: "column", gap: 14 }}>
+              <MetalText shader tone="silver" fontSize={64}>Argent</MetalText>
+              <MetalText shader tone="gold" fontSize={64}>Argent</MetalText>
+              <MetalText as="div" tone="gunmetal" style={{ fontSize: 36, fontWeight: 760, letterSpacing: "-0.03em" }}>
+                CSS fallback mode
               </MetalText>
             </div>
             <CodeBlock
               code={`import { MetalText } from "argentui";
 
-<MetalText tone="silver">Quicksilver</MetalText>
-<MetalText tone="gold">Solid gold</MetalText>
-<MetalText tone="gunmetal" shimmer={false}>
-  Static chrome
-</MetalText>`}
+// the real shader, poured into the glyphs
+<MetalText shader tone="silver" fontSize={64}>
+  Argent
+</MetalText>
+
+// CSS chrome gradient — free, any scale
+<MetalText tone="gunmetal">Quicksilver</MetalText>`}
             />
           </div>
         </div>

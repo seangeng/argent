@@ -1,24 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { LiquidMetal } from "@paper-design/shaders-react";
-import { TONE_PARAMS, useInView, useMounted, useReducedMotion, type MetalTone } from "./metal";
-
-// Paper's image pre-processing misbehaves when several logos initialise at
-// once (only one survives) — serialise mounts a few hundred ms apart.
-let mountQueue: Promise<void> = Promise.resolve();
-function useStaggeredMount(): boolean {
-  const [go, setGo] = useState(false);
-  useEffect(() => {
-    let alive = true;
-    mountQueue = mountQueue.then(async () => {
-      if (alive) setGo(true);
-      await new Promise((r) => setTimeout(r, 500));
-    });
-    return () => {
-      alive = false;
-    };
-  }, []);
-  return go;
-}
+import { TONE_PARAMS, useInView, useMounted, useReducedMotion, useStaggeredMount, type MetalTone } from "./metal";
 
 export interface MetalLogoProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Image URL (or data URI) with a transparent background — the metal flows inside its silhouette. */

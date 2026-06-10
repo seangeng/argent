@@ -2,7 +2,7 @@
 
 **Liquid-metal UI for React.** Flowing chrome, gold, and gunmetal surfaces that ripple like mercury — real liquid metal, powered by [Paper's `LiquidMetal` WebGL shader](https://shaders.paper.design/liquid-metal), wrapped in components. A metal sibling to [Glacé](https://glaceui.com).
 
-[**argentui.com**](https://argentui.seangeng94.workers.dev) · [npm](https://www.npmjs.com/package/argentui)
+[**argentui.com**](https://argentui.com) · [npm](https://www.npmjs.com/package/argentui)
 
 ![Argent](https://cdn.jsdelivr.net/gh/seangeng/argent@main/assets/hero.png)
 
@@ -56,13 +56,16 @@ A padded liquid-metal panel.
 ```
 
 ### `<MetalText>`
-Chrome text — a metallic gradient clipped to the glyphs with a flowing shimmer. Pure CSS, no WebGL.
+Metal type. By default a chrome gradient clipped to the glyphs (pure CSS, free at any scale). Pass `shader` and the liquid metal pours into the letterforms — flowing bands, liquid edges, chromatic fringe.
 
 ![Chrome text](https://cdn.jsdelivr.net/gh/seangeng/argent@main/assets/text.png)
 
 ```tsx
-<MetalText tone="gold" style={{ fontSize: 64 }}>Solid gold</MetalText>
+<MetalText shader tone="silver" fontSize={64}>Quicksilver</MetalText>
+<MetalText tone="gold" style={{ fontSize: 64 }}>Solid gold</MetalText>  // CSS mode
 ```
+
+> Shader mode renders the glyphs into an SVG silhouette, so it sees **system fonts only** — webfonts won't resolve inside it. The CSS gradient stands in until the shader loads (and wherever WebGL is unavailable).
 
 ### `<MetalLogo>`
 Pour the metal into any mark — pass an image with a transparent background and it flows inside the silhouette.

@@ -38,6 +38,24 @@ export const TONE_PARAMS: Record<MetalTone, Tuned> = {
   },
 };
 
+// Paper's image pre-processing misbehaves when several image-mask shaders
+// initialise at once (only one survives) — serialise mounts a beat apart.
+let imageMountQueue: Promise<void> = Promise.resolve();
+export function useStaggeredMount(): boolean {
+  const [go, setGo] = useState(false);
+  useEffect(() => {
+    let alive = true;
+    imageMountQueue = imageMountQueue.then(async () => {
+      if (alive) setGo(true);
+      await new Promise((r) => setTimeout(r, 500));
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+  return go;
+}
+
 /** True once mounted on the client — the WebGL canvas can't render during SSR. */
 export function useMounted(): boolean {
   const [m, setM] = useState(false);
