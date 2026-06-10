@@ -277,23 +277,30 @@ import "argentui/styles.css";
           <h2>Metal type</h2>
           <p>
             Pass <code style={{ fontFamily: "var(--mono)", fontSize: 14 }}>shader</code> and the
-            liquid metal pours into the letterforms — flowing bands, liquid edges, chromatic
-            fringe. Without it you get the CSS chrome gradient (zero cost, any scale — the hero
-            headline above is the CSS mode).
+            liquid metal pours into the letterforms — or set{" "}
+            <code style={{ fontFamily: "var(--mono)", fontSize: 14 }}>variant="outline"</code> to
+            run the metal around the edges over a dark or gradient interior. Without either you
+            get the CSS chrome gradient (zero cost, any scale — the hero headline is the CSS mode).
           </p>
           <div className="grid2">
             <div className="stage" style={{ flexDirection: "column", gap: 14 }}>
-              <MetalText shader tone="silver" fontSize={64}>Argent</MetalText>
-              <MetalText shader tone="gold" fontSize={64}>Argent</MetalText>
-              <MetalText as="div" tone="gunmetal" style={{ fontSize: 36, fontWeight: 760, letterSpacing: "-0.03em" }}>
-                CSS fallback mode
+              <MetalText shader tone="silver" fontSize={60}>Argent</MetalText>
+              <MetalText shader variant="outline" tone="silver" fontSize={60} fillGradient={["#23262c", "#0a0b0d"]}>
+                Argent
+              </MetalText>
+              <MetalText shader variant="outline" tone="gold" fontSize={60} fill="#141002">
+                Argent
               </MetalText>
             </div>
             <CodeBlock
               code={`import { MetalText } from "argentui";
 
-// the real shader, poured into the glyphs
-<MetalText shader tone="silver" fontSize={64}>
+// metal floods the glyphs
+<MetalText shader tone="silver">Argent</MetalText>
+
+// metal edges, dark gradient inside
+<MetalText shader variant="outline"
+  fillGradient={["#23262c", "#0a0b0d"]}>
   Argent
 </MetalText>
 

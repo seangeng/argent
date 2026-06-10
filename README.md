@@ -56,12 +56,18 @@ A padded liquid-metal panel.
 ```
 
 ### `<MetalText>`
-Metal type. By default a chrome gradient clipped to the glyphs (pure CSS, free at any scale). Pass `shader` and the liquid metal pours into the letterforms — flowing bands, liquid edges, chromatic fringe.
+Metal type. By default a chrome gradient clipped to the glyphs (pure CSS, free at any scale). Pass `shader` and the liquid metal pours into the letterforms — flowing bands, liquid edges, chromatic fringe. Or set `variant="outline"` to run the metal around the edges of each glyph over a dark or gradient interior — the border treatment, for type.
 
 ![Chrome text](https://cdn.jsdelivr.net/gh/seangeng/argent@main/assets/text.png)
 
 ```tsx
 <MetalText shader tone="silver" fontSize={64}>Quicksilver</MetalText>
+
+// metal edges, dark gradient interior
+<MetalText shader variant="outline" fillGradient={["#23262c", "#0a0b0d"]} fontSize={64}>
+  Quicksilver
+</MetalText>
+
 <MetalText tone="gold" style={{ fontSize: 64 }}>Solid gold</MetalText>  // CSS mode
 ```
 

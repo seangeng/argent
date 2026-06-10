@@ -3,7 +3,7 @@ export type { MetalProps, MetalCardProps, MetalButtonProps, MetalVariant, MetalF
 export { MetalToggle, MetalProgress, MetalBadge } from "./controls";
 export type { MetalToggleProps, MetalProgressProps, MetalBadgeProps } from "./controls";
 export { MetalText } from "./text";
-export type { MetalTextProps } from "./text";
+export type { MetalTextProps, MetalTextVariant } from "./text";
 export { MetalLogo } from "./logo";
 export type { MetalLogoProps } from "./logo";
 export { MetalFill, TONE_PARAMS, useMounted, useInView, useReducedMotion } from "./metal";
