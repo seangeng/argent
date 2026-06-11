@@ -58,10 +58,10 @@ await page.waitForTimeout(2200);
 await shot("#logo .stage", `${OUT}/logos.png`);
 await shot("#text .stage", `${OUT}/text.png`);
 await shot("#controls .stage", `${OUT}/controls.png`);
-await shot(".lab", `${OUT}/lab.png`);
+await shot("#lab .playground", `${OUT}/lab.png`);
 
 // flip the lab to the native engine and capture it for A/B review
-await page.locator(".controls .seg button", { hasText: /^native$/ }).click();
+await page.locator("#lab .seg button", { hasText: /^native$/ }).click();
 await page.waitForTimeout(1500);
 await shot(".lab-stage", `${OUT}/native.png`);
 
