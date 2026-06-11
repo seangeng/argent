@@ -194,6 +194,48 @@ section > .wrap > p { color: var(--ink-2); max-width: 660px; margin: 0 0 26px; }
 .seg button[data-on="true"]:hover { background: #fff; color: #111; }
 .lab-stage { min-height: 280px; }
 
+/* ── Labeled control rows (demo labs) ─────────────────────────────────── */
+.ctl-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: stretch;
+  width: 100%;
+  max-width: 640px;
+}
+.ctl-row { display: flex; align-items: center; gap: 14px; }
+.ctl-row-label {
+  flex: none;
+  width: 52px;
+  text-align: right;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.ctl-row-seg { flex: 1; justify-content: flex-start; }
+.ctl-row-seg button { flex: 0 0 auto; min-width: 0; padding: 6px 12px; }
+@media (max-width: 560px) {
+  .ctl-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .ctl-row-label { text-align: left; }
+}
+
+/* tone chips show the actual metal */
+.tone-chip { display: inline-flex; align-items: center; gap: 7px; text-transform: capitalize; }
+.tone-dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--argent-grad);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 -1px 1px rgba(0, 0, 0, 0.4);
+}
+.tone-chip[data-on="true"] .tone-dot { border-color: rgba(0, 0, 0, 0.4); }
+
+/* font chips render in their own face */
+.font-chip { font-size: 13px !important; }
+
 /* ── Lab inputs ───────────────────────────────────────────────────────── */
 .text-input {
   background: var(--panel);

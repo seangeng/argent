@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Metal, type MetalTone, type MetalVariant, type MetalFrame, type MetalEngine, type MetalFinish } from "argentui";
 import { CodeBlock } from "./CodeBlock";
+import { ToneSeg } from "./Labs";
 
-const TONES: MetalTone[] = ["silver", "gold", "gunmetal", "obsidian"];
 const VARIANTS: MetalVariant[] = ["border", "fill"];
 const FRAMES: MetalFrame[] = ["single", "double"];
 const ENGINES: MetalEngine[] = ["paper", "native"];
@@ -40,11 +40,7 @@ export function MetalLab() {
         <div className="ctl">
           <label>Tone</label>
           <div className="seg">
-            {TONES.map((t) => (
-              <button key={t} data-on={tone === t} onClick={() => setTone(t)}>
-                {t}
-              </button>
-            ))}
+            <ToneSeg value={tone} onChange={setTone} />
           </div>
         </div>
         <div className="ctl">

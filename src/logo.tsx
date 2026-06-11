@@ -32,6 +32,7 @@ export function MetalLogo({ src, tone = "silver", size = 160, width, height, spe
     <div ref={ref} style={{ position: "relative", width: w, height: h, ...style }} {...rest}>
       {mounted && inView && turn && (
         <LiquidMetal
+          key={src}
           image={src}
           suspendWhenProcessingImage={false}
           colorBack="#00000000"

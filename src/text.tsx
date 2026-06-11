@@ -188,6 +188,9 @@ function ShaderText({
         <>
           {outlined && <img src={interior(geom, fill, fillGradient)} alt="" aria-hidden="true" style={LAYER} />}
           <LiquidMetal
+            // keyed by silhouette: rapid prop changes can finish processing
+            // out of order and leave stale glyphs — a clean re-init can't
+            key={`${geom.text}|${geom.fontFamily}|${geom.w}|${outlined ? "o" : "f"}`}
             image={outlined ? outlineSilhouette(geom, ow) : fillSilhouette(geom)}
             suspendWhenProcessingImage={false}
             colorBack="#00000000"

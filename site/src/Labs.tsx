@@ -4,6 +4,30 @@ import { CodeBlock } from "./CodeBlock";
 
 const TONES: MetalTone[] = ["silver", "gold", "gunmetal", "obsidian"];
 
+/** A labeled control row — keeps the lab panels scannable. */
+export function Row({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="ctl-row">
+      <span className="ctl-row-label">{label}</span>
+      <div className="seg ctl-row-seg">{children}</div>
+    </div>
+  );
+}
+
+/** Tone chips with a real metal swatch — the colour you'll actually get. */
+export function ToneSeg({ value, onChange }: { value: MetalTone; onChange: (t: MetalTone) => void }) {
+  return (
+    <>
+      {TONES.map((t) => (
+        <button key={t} className="tone-chip" data-on={value === t} onClick={() => onChange(t)}>
+          <span className="tone-dot" data-tone={t} aria-hidden="true" />
+          {t}
+        </button>
+      ))}
+    </>
+  );
+}
+
 /* ── Effects: motion characters on the Metal primitive ─────────────────── */
 
 const EFFECTS: { key: MetalEffect; blurb: string }[] = [
@@ -26,19 +50,17 @@ export function EffectsDemo() {
             {effect}
           </div>
         </Metal>
-        <div className="seg" style={{ justifyContent: "center" }}>
-          {EFFECTS.map((e) => (
-            <button key={e.key} data-on={effect === e.key} onClick={() => setEffect(e.key)}>
-              {e.key}
-            </button>
-          ))}
-        </div>
-        <div className="seg" style={{ justifyContent: "center" }}>
-          {TONES.map((t) => (
-            <button key={t} data-on={tone === t} onClick={() => setTone(t)}>
-              {t}
-            </button>
-          ))}
+        <div className="ctl-rows">
+          <Row label="Effect">
+            {EFFECTS.map((e) => (
+              <button key={e.key} data-on={effect === e.key} onClick={() => setEffect(e.key)}>
+                {e.key}
+              </button>
+            ))}
+          </Row>
+          <Row label="Tone">
+            <ToneSeg value={tone} onChange={setTone} />
+          </Row>
         </div>
         <p style={{ margin: 0, fontSize: 13, color: "var(--ink-3)" }}>{blurb}</p>
       </div>
@@ -101,29 +123,27 @@ export function LogoLab() {
     <div>
       <div className="stage" style={{ flexDirection: "column", gap: 18 }}>
         <MetalLogo src={src} tone={tone} size={180} />
-        <div className="seg" style={{ justifyContent: "center" }}>
-          {BRANDS.map((b) => (
-            <button key={b.name} data-on={active === b.name} onClick={() => pick(b.name, b.slug)}>
-              {b.name}
+        <div className="ctl-rows">
+          <Row label="Mark">
+            {BRANDS.map((b) => (
+              <button key={b.name} data-on={active === b.name} onClick={() => pick(b.name, b.slug)}>
+                {b.name}
+              </button>
+            ))}
+            <button data-on={active === "custom"} onClick={() => fileRef.current?.click()}>
+              upload…
             </button>
-          ))}
-          <button data-on={active === "custom"} onClick={() => fileRef.current?.click()}>
-            upload…
-          </button>
-          <input
-            ref={fileRef}
-            type="file"
-            accept="image/png,image/svg+xml,image/webp"
-            style={{ display: "none" }}
-            onChange={(e) => upload(e.target.files?.[0])}
-          />
-        </div>
-        <div className="seg" style={{ justifyContent: "center" }}>
-          {TONES.map((t) => (
-            <button key={t} data-on={tone === t} onClick={() => setTone(t)}>
-              {t}
-            </button>
-          ))}
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/png,image/svg+xml,image/webp"
+              style={{ display: "none" }}
+              onChange={(e) => upload(e.target.files?.[0])}
+            />
+          </Row>
+          <Row label="Tone">
+            <ToneSeg value={tone} onChange={setTone} />
+          </Row>
         </div>
         <p style={{ margin: 0, fontSize: 13, color: "var(--ink-3)" }}>
           Any image with a transparent background works — try your own mark.
@@ -138,10 +158,21 @@ export function LogoLab() {
 
 /* ── Text lab: your words, Google Fonts, poured metal ───────────────────── */
 
-const GOOGLE_FONTS = ["System", "Playfair Display", "Bebas Neue", "Space Grotesk", "Oswald", "Pacifico", "Unbounded"];
+// each family pinned to a weight it actually ships — requesting a missing
+// weight makes the css2 API 400 and the font silently never applies
+const GOOGLE_FONTS: { name: string; weight: number }[] = [
+  { name: "System", weight: 800 },
+  { name: "Playfair Display", weight: 800 },
+  { name: "Bebas Neue", weight: 400 },
+  { name: "Space Grotesk", weight: 700 },
+  { name: "Oswald", weight: 700 },
+  { name: "Pacifico", weight: 400 },
+  { name: "Unbounded", weight: 800 },
+];
 
 interface LoadedFont {
   family: string;
+  weight: number;
   css: string;
 }
 const fontCache = new Map<string, LoadedFont>();
@@ -150,10 +181,15 @@ async function loadGoogleFont(family: string, weight: number): Promise<LoadedFon
   const key = `${family}:${weight}`;
   const hit = fontCache.get(key);
   if (hit) return hit;
-  const cssUrl = `https://fonts.googleapis.com/css2?family=${family.replace(/ /g, "+")}:wght@${weight}&display=swap`;
-  const css = await fetch(cssUrl).then((r) => r.text());
+  const fetchCss = (w?: number) =>
+    fetch(`https://fonts.googleapis.com/css2?family=${family.replace(/ /g, "+")}${w ? `:wght@${w}` : ""}&display=swap`).then((r) =>
+      r.ok ? r.text() : "",
+    );
+  let css = await fetchCss(weight);
+  if (!css.includes(".woff2")) css = await fetchCss(); // weight missing — take the default face
   const urls = [...css.matchAll(/url\((https:[^)]+\.woff2)\)/g)].map((m) => m[1]);
   const woff2 = urls[urls.length - 1]; // latin block is listed last
+  if (!woff2) throw new Error(`no woff2 for ${family}`);
   const blob = await fetch(woff2).then((r) => r.blob());
   const dataUrl = await new Promise<string>((res) => {
     const fr = new FileReader();
@@ -167,6 +203,7 @@ async function loadGoogleFont(family: string, weight: number): Promise<LoadedFon
   // …and renderable inside the glyph SVG
   const loaded = {
     family,
+    weight,
     css: `@font-face{font-family:'${family}';src:url(${dataUrl}) format('woff2');font-weight:${weight};}`,
   };
   fontCache.set(key, loaded);
@@ -190,6 +227,14 @@ export function TextLab() {
   const [font, setFont] = useState<LoadedFont | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // preload every face once so chips render in their own font and
+  // switching is instant (each is a small cached woff2)
+  useEffect(() => {
+    GOOGLE_FONTS.forEach((f) => {
+      if (f.name !== "System") loadGoogleFont(f.name, f.weight).catch(() => {});
+    });
+  }, []);
+
   useEffect(() => {
     let alive = true;
     if (fontPick === "System") {
@@ -197,15 +242,17 @@ export function TextLab() {
       return;
     }
     setLoading(true);
-    loadGoogleFont(fontPick, 800)
+    const pick = GOOGLE_FONTS.find((f) => f.name === fontPick)!;
+    loadGoogleFont(pick.name, pick.weight)
       .then((f) => alive && setFont(f))
+      .catch(() => alive && setFont(null))
       .finally(() => alive && setLoading(false));
     return () => {
       alive = false;
     };
   }, [fontPick]);
 
-  const fontProps = font ? { fontFamily: `'${font.family}'`, fontCss: font.css } : {};
+  const fontProps = font ? { fontFamily: `'${font.family}'`, fontCss: font.css, fontWeight: font.weight } : {};
   const code = `<MetalText shader tone="${tone}"${outline ? `\n  variant="outline" fillGradient={["#23262c", "#0a0b0d"]}` : ""}${font ? `\n  fontFamily="'${font.family}'" fontCss={googleFontFace}` : ""}>
   ${text}
 </MetalText>`;
@@ -238,22 +285,28 @@ export function TextLab() {
             pour it
           </button>
         </div>
-        <div className="seg" style={{ justifyContent: "center" }}>
-          {GOOGLE_FONTS.map((f) => (
-            <button key={f} data-on={fontPick === f} disabled={loading && fontPick !== f} onClick={() => setFontPick(f)}>
-              {loading && fontPick === f ? "…" : f}
-            </button>
-          ))}
-        </div>
-        <div className="seg" style={{ justifyContent: "center" }}>
-          {TONES.map((t) => (
-            <button key={t} data-on={tone === t} onClick={() => setTone(t)}>
-              {t}
-            </button>
-          ))}
-          <button data-on={outline} onClick={() => setOutline(!outline)}>
-            outline
-          </button>
+        <div className="ctl-rows">
+          <Row label="Font">
+            {GOOGLE_FONTS.map((f) => (
+              <button
+                key={f.name}
+                className="font-chip"
+                style={f.name === "System" ? undefined : { fontFamily: `'${f.name}'`, fontWeight: f.weight }}
+                data-on={fontPick === f.name}
+                disabled={loading && fontPick !== f.name}
+                onClick={() => setFontPick(f.name)}
+              >
+                {loading && fontPick === f.name ? "…" : f.name}
+              </button>
+            ))}
+          </Row>
+          <Row label="Tone">
+            <ToneSeg value={tone} onChange={setTone} />
+          </Row>
+          <Row label="Style">
+            <button data-on={!outline} onClick={() => setOutline(false)}>filled</button>
+            <button data-on={outline} onClick={() => setOutline(true)}>outline</button>
+          </Row>
         </div>
         <p style={{ margin: 0, fontSize: 13, color: "var(--ink-3)" }}>
           {loading ? "Loading font…" : "Google Fonts work too — the face is embedded into the glyph silhouette as a data URI."}
