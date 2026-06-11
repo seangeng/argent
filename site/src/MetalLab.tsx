@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Metal, type MetalTone, type MetalVariant, type MetalFrame, type MetalEngine, type MetalFinish } from "argentui";
 import { CodeBlock } from "./CodeBlock";
-import { ToneSeg } from "./Labs";
+import { Segmented, Slider, Toggle, ToneSegmented } from "./Controls";
 
 const VARIANTS: MetalVariant[] = ["border", "fill"];
 const FRAMES: MetalFrame[] = ["single", "double"];
@@ -21,147 +21,69 @@ export function MetalLab() {
   const [halo, setHalo] = useState(false);
   const [engine, setEngine] = useState<MetalEngine>("paper");
   const [finish, setFinish] = useState<MetalFinish>("surface");
-  const [angle, setAngle] = useState<number | null>(null);
+  const [autoAngle, setAutoAngle] = useState(true);
+  const [angle, setAngle] = useState(68);
 
-  const showReveal = variant === "border";
+  const border = variant === "border";
   const code = `<Metal
   tone="${tone}"
-  variant="${variant}"${variant === "border" && frame === "double" ? `\n  frame="double"` : ""}${variant === "border" && tint ? "\n  tint" : ""}${showReveal && reveal ? "\n  revealOnHover" : ""}
+  variant="${variant}"${border && frame === "double" ? `\n  frame="double"` : ""}${border && tint ? "\n  tint" : ""}${border && reveal ? "\n  revealOnHover" : ""}
   radius={${radius}}
   speed={${speed}}
-  metalScale={${metalScale}}${finish !== "surface" ? `\n  finish="${finish}"` : ""}${angle !== null ? `\n  angle={${angle}}` : ""}${engine === "native" ? `\n  engine="native"` : ""}${halo ? "\n  halo" : ""}${sheen ? "\n  sheen" : ""}
+  metalScale={${metalScale}}${finish !== "surface" ? `\n  finish="${finish}"` : ""}${!autoAngle ? `\n  angle={${angle}}` : ""}${engine === "native" ? `\n  engine="native"` : ""}${halo ? "\n  halo" : ""}${sheen ? "\n  sheen" : ""}
 >
   <div style={{ padding: 36 }}>Argent</div>
 </Metal>`;
 
   return (
-    <div className="lab">
-      <div className="controls">
-        <div className="ctl">
-          <label>Tone</label>
-          <div className="seg">
-            <ToneSeg value={tone} onChange={setTone} />
+    <div className="playground">
+      <div className="stage stage--demo lab-stage">
+        <Metal
+          tone={tone}
+          variant={variant}
+          frame={frame}
+          tint={tint}
+          revealOnHover={border && reveal}
+          radius={radius}
+          speed={speed}
+          metalScale={metalScale}
+          engine={engine}
+          finish={finish}
+          angle={autoAngle ? undefined : angle}
+          halo={halo}
+          sheen={sheen}
+        >
+          <div style={{ padding: 40, fontSize: 24, fontWeight: 700, letterSpacing: "-0.03em", minWidth: 220, textAlign: "center" }}>
+            Argent
           </div>
-        </div>
-        <div className="ctl">
-          <label>Engine</label>
-          <div className="seg">
-            {ENGINES.map((e) => (
-              <button key={e} data-on={engine === e} onClick={() => setEngine(e)}>
-                {e}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className="ctl">
-          <label>Finish</label>
-          <div className="seg">
-            {FINISHES.map((fi) => (
-              <button key={fi} data-on={finish === fi} onClick={() => setFinish(fi)}>
-                {fi}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className="ctl">
-          <label>
-            Angle{" "}
-            <b>
-              {angle === null ? "auto" : `${angle}°`}
-              {angle !== null && (
-                <button className="mini-reset" onClick={() => setAngle(null)} aria-label="Reset angle to auto">
-                  ×
-                </button>
-              )}
-            </b>
-          </label>
-          <input type="range" min={0} max={180} value={angle ?? 68} onChange={(e) => setAngle(+e.target.value)} />
-        </div>
-        <div className="ctl">
-          <label>Variant</label>
-          <div className="seg">
-            {VARIANTS.map((v) => (
-              <button key={v} data-on={variant === v} onClick={() => setVariant(v)}>
-                {v}
-              </button>
-            ))}
-          </div>
-        </div>
-        {showReveal && (
-          <div className="ctl">
-            <label>Frame</label>
-            <div className="seg">
-              {FRAMES.map((f) => (
-                <button key={f} data-on={frame === f} onClick={() => setFrame(f)}>
-                  {f}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-        {showReveal && (
-          <div className="ctl">
-            <label>Tint inside</label>
-            <div className="seg">
-              <button data-on={tint} onClick={() => setTint(true)}>on</button>
-              <button data-on={!tint} onClick={() => setTint(false)}>off</button>
-            </div>
-          </div>
-        )}
-        {showReveal && (
-          <div className="ctl">
-            <label>Fill on hover</label>
-            <div className="seg">
-              <button data-on={reveal} onClick={() => setReveal(true)}>on</button>
-              <button data-on={!reveal} onClick={() => setReveal(false)}>off</button>
-            </div>
-          </div>
-        )}
-        <div className="ctl">
-          <label>
-            Radius <b>{radius}px</b>
-          </label>
-          <input type="range" min={0} max={48} value={radius} onChange={(e) => setRadius(+e.target.value)} />
-        </div>
-        <div className="ctl">
-          <label>
-            Speed <b>{speed.toFixed(1)}</b>
-          </label>
-          <input type="range" min={0} max={3} step={0.1} value={speed} onChange={(e) => setSpeed(+e.target.value)} />
-        </div>
-        <div className="ctl">
-          <label>
-            Scale <b>{metalScale.toFixed(1)}</b>
-          </label>
-          <input type="range" min={0.4} max={2.4} step={0.1} value={metalScale} onChange={(e) => setMetalScale(+e.target.value)} />
-        </div>
-        <div className="ctl">
-          <label>Halo</label>
-          <div className="seg">
-            <button data-on={halo} onClick={() => setHalo(true)}>on</button>
-            <button data-on={!halo} onClick={() => setHalo(false)}>off</button>
-          </div>
-        </div>
-        <div className="ctl">
-          <label>Sheen</label>
-          <div className="seg">
-            <button data-on={sheen} onClick={() => setSheen(true)}>on</button>
-            <button data-on={!sheen} onClick={() => setSheen(false)}>off</button>
-          </div>
-        </div>
+        </Metal>
       </div>
 
-      <div>
-        <div className="stage lab-stage">
-          <Metal tone={tone} variant={variant} frame={frame} tint={tint} revealOnHover={showReveal && reveal} radius={radius} speed={speed} metalScale={metalScale} engine={engine} finish={finish} angle={angle ?? undefined} halo={halo} sheen={sheen}>
-            <div style={{ padding: 40, fontSize: 24, fontWeight: 700, letterSpacing: "-0.03em", minWidth: 220, textAlign: "center" }}>
-              Argent
-            </div>
-          </Metal>
-        </div>
-        <div style={{ marginTop: 14 }}>
-          <CodeBlock code={code} lang="tsx" />
-        </div>
+      <div className="controls">
+        <ToneSegmented value={tone} onChange={setTone} />
+        <Segmented label="variant" value={variant} options={VARIANTS} onChange={setVariant} />
+        {border && <Segmented label="frame" value={frame} options={FRAMES} onChange={setFrame} />}
+        <Segmented label="finish" value={finish} options={FINISHES} onChange={setFinish} />
+        <Segmented label="engine" value={engine} options={ENGINES} onChange={setEngine} />
+      </div>
+
+      <div className="controls">
+        <Slider label="Radius" value={radius} min={0} max={48} onChange={setRadius} suffix="px" />
+        <Slider label="Speed" value={speed} min={0} max={3} step={0.1} onChange={setSpeed} suffix="×" />
+        <Slider label="Scale" value={metalScale} min={0.4} max={2.4} step={0.1} onChange={setMetalScale} suffix="×" />
+        <Slider label={autoAngle ? "Angle (auto)" : "Angle"} value={angle} min={0} max={180} onChange={(v) => { setAngle(v); setAutoAngle(false); }} suffix="°" />
+      </div>
+
+      <div className="controls">
+        <Toggle label="auto angle" on={autoAngle} onClick={() => setAutoAngle(!autoAngle)} />
+        {border && <Toggle label="tint" on={tint} onClick={() => setTint(!tint)} />}
+        {border && <Toggle label="fill on hover" on={reveal} onClick={() => setReveal(!reveal)} />}
+        <Toggle label="halo" on={halo} onClick={() => setHalo(!halo)} />
+        <Toggle label="sheen" on={sheen} onClick={() => setSheen(!sheen)} />
+      </div>
+
+      <div style={{ marginTop: 16 }}>
+        <CodeBlock code={code} lang="tsx" />
       </div>
     </div>
   );

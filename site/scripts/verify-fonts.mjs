@@ -28,7 +28,7 @@ await page.waitForTimeout(2500); // initial Playfair load
 
 // RAPID toggling: Bebas -> Pacifico -> Oswald in quick succession
 for (const f of ["Bebas Neue", "Pacifico", "Oswald"]) {
-  await page.locator("#text .font-chip", { hasText: f }).click();
+  await page.locator("#text .seg button", { hasText: f }).click();
   await page.waitForTimeout(150);
 }
 await page.waitForTimeout(3000); // settle — must show Oswald
@@ -36,7 +36,7 @@ await textStage.screenshot({ path: `${OUT}/rapid-oswald.png` });
 console.log("✓ rapid-oswald.png");
 
 // then one calm switch to Pacifico (script face — unmistakable)
-await page.locator("#text .font-chip", { hasText: "Pacifico" }).click();
+await page.locator("#text .seg button", { hasText: "Pacifico" }).click();
 await page.waitForTimeout(2600);
 await textStage.screenshot({ path: `${OUT}/calm-pacifico.png` });
 console.log("✓ calm-pacifico.png");
