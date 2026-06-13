@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Metal, MetalButton, MetalIcon, MetalLogo, MetalText, type MetalEffect, type MetalTone } from "argentui";
-import { Bell, Heart, Settings, Sparkles, Star, Zap } from "lucide-react";
+import { BellIcon, BoltIcon, Cog6ToothIcon, HeartIcon, SparklesIcon, StarIcon } from "@heroicons/react/24/solid";
 import { CodeBlock } from "./CodeBlock";
 import { Segmented, ToneSegmented, Toggle } from "./Controls";
 
@@ -274,12 +274,12 @@ export function TextLab() {
 /* ── Icon lab: pour metal into any SVG icon (lucide / heroicons / raw) ──── */
 
 const ICONS = [
-  { name: "Sparkles", el: <Sparkles /> },
-  { name: "Heart", el: <Heart /> },
-  { name: "Bolt", el: <Zap /> },
-  { name: "Star", el: <Star /> },
-  { name: "Bell", el: <Bell /> },
-  { name: "Settings", el: <Settings /> },
+  { name: "Sparkles", el: <SparklesIcon /> },
+  { name: "Heart", el: <HeartIcon /> },
+  { name: "Bolt", el: <BoltIcon /> },
+  { name: "Star", el: <StarIcon /> },
+  { name: "Bell", el: <BellIcon /> },
+  { name: "Settings", el: <Cog6ToothIcon /> },
 ];
 
 export function IconLab() {
@@ -292,7 +292,7 @@ export function IconLab() {
             <MetalIcon key={i.name} icon={i.el} tone={tone} size={42} aria-label={i.name} />
           ))}
         </div>
-        <MetalButton tone={tone} variant="fill" icon={<Sparkles />}>
+        <MetalButton tone={tone} variant="fill" icon={<SparklesIcon />}>
           Get started
         </MetalButton>
       </div>
@@ -301,14 +301,15 @@ export function IconLab() {
       </div>
       <p className="demo-note">
         The real liquid-metal shader, poured into each icon (one canvas each, gated to the viewport).
-        Pass a lucide-react / Heroicons element, raw SVG, or a URL.
+        Pass a Heroicons / lucide-react element, raw SVG, or a URL — solid icons fill, outline icons
+        flow in the stroke.
       </p>
       <CodeBlock
         code={`import { MetalIcon, MetalButton } from "argentui";
-import { Sparkles } from "lucide-react";
+import { SparklesIcon } from "@heroicons/react/24/solid";
 
-<MetalIcon icon={<Sparkles />} tone="${tone}" size={32} />
-<MetalButton icon={<Sparkles />}>Get started</MetalButton>`}
+<MetalIcon icon={<SparklesIcon />} tone="${tone}" size={32} />
+<MetalButton icon={<SparklesIcon />}>Get started</MetalButton>`}
       />
     </div>
   );

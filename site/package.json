@@ -8,6 +8,7 @@
     "deploy": "vite build && wrangler deploy"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@paper-design/shaders-react": "^0.0.76",
     "@radix-ui/react-select": "^2.3.0",
     "argentui": "file:..",
