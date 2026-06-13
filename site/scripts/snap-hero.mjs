@@ -1,0 +1,22 @@
+import { chromium } from "playwright";
+import { createServer } from "node:http";
+import { readFileSync, existsSync } from "node:fs";
+import { join, extname } from "node:path";
+const DIST = new URL("../dist", import.meta.url).pathname;
+const MIME = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css" };
+const server = createServer((req, res) => {
+  const path = req.url.split("?")[0];
+  let file = join(DIST, path);
+  if (!existsSync(file) || path === "/") file = join(DIST, "index.html");
+  res.setHeader("content-type", MIME[extname(file)] ?? "application/octet-stream");
+  res.end(readFileSync(file));
+});
+await new Promise((r) => server.listen(4315, r));
+const browser = await chromium.launch({ args: ["--enable-unsafe-swiftshader"] });
+const page = await browser.newPage({ viewport: { width: 1440, height: 760 }, deviceScaleFactor: 2 });
+await page.goto("http://localhost:4315/");
+await page.waitForTimeout(3500);
+await page.screenshot({ path: "/tmp/argent-ux/hero-now.png", clip: { x: 0, y: 0, width: 1440, height: 560 } });
+console.log("✓ hero-now");
+await browser.close();
+server.close();

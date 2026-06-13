@@ -66,12 +66,13 @@ body::before {
 /* ── Hero ─────────────────────────────────────────────────────────────── */
 .hero { padding: 64px 0 36px; text-align: center; }
 .hero h1 {
-  font-size: clamp(44px, 9vw, 88px);
-  line-height: 0.98;
+  line-height: 1.0;
   letter-spacing: -0.04em;
   margin: 0 0 18px;
   font-weight: 720;
 }
+/* the shader word is an inline-block canvas — pull it onto the text baseline */
+.hero-metal { vertical-align: -0.22em; margin: 0 -0.04em; }
 .hero h1 .liq {
   background: linear-gradient(135deg, #fff 0%, #cdd2da 22%, #7e858f 42%, #3a3e44 50%, #aab0b9 60%, #f0f2f5 80%, #fff 100%);
   background-size: 220% 220%;

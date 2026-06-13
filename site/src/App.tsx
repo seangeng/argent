@@ -18,6 +18,22 @@ function ProgressDemo() {
 }
 
 const TONES: MetalTone[] = ["silver", "gold", "gunmetal", "obsidian"];
+
+/** Hero type size in px, responsive — shared by the CSS words and the shader word
+ *  so they line up exactly. */
+function useHeroSize() {
+  const [px, setPx] = useState(86);
+  useEffect(() => {
+    const measure = () => {
+      const w = window.innerWidth;
+      setPx(w < 480 ? 44 : w < 720 ? 60 : w < 960 ? 74 : 86);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+  return px;
+}
 const MARK = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23fff'/%3E%3Cstop offset='.5' stop-color='%23888'/%3E%3Cstop offset='1' stop-color='%23fff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='2' y='2' width='20' height='20' rx='6' fill='url(%23g)'/%3E%3C/svg%3E";
 
 function CopyInstall() {
@@ -40,11 +56,12 @@ function CopyInstall() {
 }
 
 export function App() {
+  const heroPx = useHeroSize();
   return (
     <>
       {/* Header */}
       <header className="nav">
-        <Metal as="nav" tone="silver" radius={16} speed={0.5} sheen className="nav-metal">
+        <Metal as="nav" tone="silver" radius={18} variant="border" borderWidth={3} finish="rim" speed={0.7} halo sheen className="nav-metal">
           <div className="nav-inner">
             <span className="brand">
               <img className="brand-mark" src={MARK} alt="" />
@@ -66,8 +83,11 @@ export function App() {
       <div className="wrap">
         {/* Hero */}
         <div className="hero">
-          <h1>
-            Liquid <MetalText tone="silver">metal</MetalText>
+          <h1 style={{ fontSize: heroPx }}>
+            Liquid{" "}
+            <MetalText shader tone="silver" fontSize={heroPx} fontWeight={760} className="hero-metal">
+              metal
+            </MetalText>
             <br />
             for React
           </h1>
