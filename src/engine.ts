@@ -136,6 +136,10 @@ export const NATIVE_TONES: Record<string, Omit<NativeMetalParams, "speed" | "sca
   gold: { light: "#ffe9a8", dark: "#6e5408", repetition: 1.8, angle: 68, softness: 0.34, dispersion: 0.028, distortion: 0.36 },
   gunmetal: { light: "#b6bec9", dark: "#14161a", repetition: 1.6, angle: 80, softness: 0.36, dispersion: 0.025, distortion: 0.34 },
   obsidian: { light: "#787c88", dark: "#000000", repetition: 1.4, angle: 92, softness: 0.42, dispersion: 0.02, distortion: 0.28 },
+  cobalt: { light: "#dbe7ff", dark: "#16244e", repetition: 1.8, angle: 70, softness: 0.34, dispersion: 0.03, distortion: 0.36 },
+  crimson: { light: "#ffd6da", dark: "#48101a", repetition: 1.8, angle: 68, softness: 0.34, dispersion: 0.03, distortion: 0.36 },
+  amethyst: { light: "#e8d6ff", dark: "#2c1854", repetition: 1.8, angle: 70, softness: 0.34, dispersion: 0.03, distortion: 0.36 },
+  emerald: { light: "#caffe0", dark: "#0e3a28", repetition: 1.7, angle: 74, softness: 0.34, dispersion: 0.028, distortion: 0.34 },
 };
 
 export interface MetalMount {

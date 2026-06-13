@@ -71,7 +71,7 @@ export function Segmented<T extends string>({
   );
 }
 
-const TONES: MetalTone[] = ["silver", "gold", "gunmetal", "obsidian"];
+const TONES: MetalTone[] = ["silver", "gold", "gunmetal", "obsidian", "cobalt", "crimson", "amethyst", "emerald"];
 
 /** Tone segment with a real metal swatch per option. */
 export function ToneSegmented({ value, onChange }: { value: MetalTone; onChange: (t: MetalTone) => void }) {

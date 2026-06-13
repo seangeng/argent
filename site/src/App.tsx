@@ -17,7 +17,7 @@ function ProgressDemo() {
   return <MetalProgress tone="silver" value={Math.min(100, value)} style={{ width: 260 }} />;
 }
 
-const TONES: MetalTone[] = ["silver", "gold", "gunmetal", "obsidian"];
+const TONES: MetalTone[] = ["silver", "gold", "gunmetal", "obsidian", "cobalt", "crimson", "amethyst", "emerald"];
 
 /** Hero type size in px, responsive — shared by the CSS words and the shader word
  *  so they line up exactly. */

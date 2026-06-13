@@ -44,6 +44,39 @@
   --argent-label-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
+.argent[data-tone="cobalt"], [data-tone="cobalt"] {
+  --argent-grad: linear-gradient(135deg, #eef4ff 0%, #a7c0f2 16%, #4a66b4 38%, #1b2a5e 52%, #5e7bce 66%, #bcd0f7 84%, #eef4ff 100%);
+  --argent-text: #0b1430;
+  --argent-edge: rgba(210, 226, 255, 0.7);
+  --argent-shadow: 0 10px 30px rgba(10, 20, 60, 0.45), inset 0 1px 0 rgba(235, 244, 255, 0.9), inset 0 -2px 3px rgba(8, 16, 50, 0.35);
+  --argent-sheen: rgba(220, 234, 255, 0.85);
+  --argent-label-shadow: 0 1px 0 rgba(225, 238, 255, 0.5);
+}
+.argent[data-tone="crimson"], [data-tone="crimson"] {
+  --argent-grad: linear-gradient(135deg, #ffeef0 0%, #f2a8b0 16%, #b83e48 38%, #5e161e 52%, #ce5a64 66%, #f7bcc2 84%, #ffeef0 100%);
+  --argent-text: #2e0a0e;
+  --argent-edge: rgba(255, 220, 224, 0.7);
+  --argent-shadow: 0 10px 30px rgba(60, 10, 16, 0.45), inset 0 1px 0 rgba(255, 235, 238, 0.9), inset 0 -2px 3px rgba(50, 8, 12, 0.35);
+  --argent-sheen: rgba(255, 224, 228, 0.85);
+  --argent-label-shadow: 0 1px 0 rgba(255, 228, 230, 0.5);
+}
+.argent[data-tone="amethyst"], [data-tone="amethyst"] {
+  --argent-grad: linear-gradient(135deg, #f6eeff 0%, #c8a8f2 16%, #7a4ab8 38%, #3a1c6e 52%, #9466ce 66%, #d8bcf7 84%, #f6eeff 100%);
+  --argent-text: #1c0e38;
+  --argent-edge: rgba(232, 214, 255, 0.7);
+  --argent-shadow: 0 10px 30px rgba(30, 12, 60, 0.45), inset 0 1px 0 rgba(244, 235, 255, 0.9), inset 0 -2px 3px rgba(24, 10, 50, 0.35);
+  --argent-sheen: rgba(236, 220, 255, 0.85);
+  --argent-label-shadow: 0 1px 0 rgba(238, 226, 255, 0.5);
+}
+.argent[data-tone="emerald"], [data-tone="emerald"] {
+  --argent-grad: linear-gradient(135deg, #eafff4 0%, #92e0b6 16%, #2f9468 38%, #134e38 52%, #4ec88c 66%, #b8f5d4 84%, #eafff4 100%);
+  --argent-text: #08281c;
+  --argent-edge: rgba(206, 255, 226, 0.7);
+  --argent-shadow: 0 10px 30px rgba(8, 40, 28, 0.45), inset 0 1px 0 rgba(232, 255, 244, 0.9), inset 0 -2px 3px rgba(6, 32, 22, 0.35);
+  --argent-sheen: rgba(220, 255, 236, 0.85);
+  --argent-label-shadow: 0 1px 0 rgba(226, 255, 240, 0.5);
+}
+
 /* ── The flowing metal fill (Paper LiquidMetal shader canvas) ─────────── */
 .argent-fill {
   position: absolute;
@@ -189,6 +222,18 @@
 }
 .argent-text[data-tone="obsidian"] {
   --argent-text-grad: linear-gradient(135deg, #9a9ca8 0%, #54565e 25%, #17181c 48%, #060608 56%, #3c3e46 72%, #84868f 92%, #a8aab4 100%);
+}
+.argent-text[data-tone="cobalt"] {
+  --argent-text-grad: linear-gradient(135deg, #eef4ff 0%, #a7c0f2 22%, #4a66b4 46%, #1b2a5e 54%, #5e7bce 70%, #bcd0f7 88%, #eef4ff 100%);
+}
+.argent-text[data-tone="crimson"] {
+  --argent-text-grad: linear-gradient(135deg, #ffeef0 0%, #f2a8b0 22%, #b83e48 46%, #5e161e 54%, #ce5a64 70%, #f7bcc2 88%, #ffeef0 100%);
+}
+.argent-text[data-tone="amethyst"] {
+  --argent-text-grad: linear-gradient(135deg, #f6eeff 0%, #c8a8f2 22%, #7a4ab8 46%, #3a1c6e 54%, #9466ce 70%, #d8bcf7 88%, #f6eeff 100%);
+}
+.argent-text[data-tone="emerald"] {
+  --argent-text-grad: linear-gradient(135deg, #eafff4 0%, #92e0b6 22%, #2f9468 46%, #134e38 54%, #4ec88c 70%, #b8f5d4 88%, #eafff4 100%);
 }
 .argent-text--shimmer { animation: argent-shimmer 7s linear infinite; }
 @keyframes argent-shimmer {

@@ -41,7 +41,7 @@ A stamped-metal button: readable at rest with a liquid-metal rim, molten on hove
 
 | prop | type | default |
 |------|------|---------|
-| `tone` | `"silver" \| "gold" \| "gunmetal" \| "obsidian"` | `"silver"` |
+| `tone` | `MetalTone` (8 finishes — see Tones) | `"silver"` |
 | `size` | `"sm" \| "md" \| "lg"` | `"md"` |
 | `speed` | `number` | `1` |
 
@@ -130,7 +130,7 @@ The base primitive every component is built on. Render any element via `as`.
 | prop | type | default | notes |
 |------|------|---------|-------|
 | `as` | `ElementType` | `"div"` | element/component to render |
-| `tone` | `MetalTone` | `"silver"` | finish (silver/gold/gunmetal/obsidian) |
+| `tone` | `MetalTone` | `"silver"` | finish (8 tones — see below) |
 | `variant` | `"border" \| "fill"` | `"border"` | metal edge only, or full surface |
 | `frame` | `"single" \| "double"` | `"single"` | double adds an inner hairline frame |
 | `tint` | `boolean` | `false` | let the metal show faintly through the interior |
@@ -146,6 +146,18 @@ The base primitive every component is built on. Render any element via `as`.
 | `sheen` | `boolean` | `false` | specular streak on hover |
 
 Theme the border interior with the `--argent-panel` CSS variable.
+
+## Tones
+
+Eight metal finishes: **silver**, **gold**, **gunmetal**, **obsidian**, and the coloured metals **cobalt** (blue), **crimson** (red), **amethyst** (purple), and **emerald** (green). Every component takes `tone`.
+
+```tsx
+<MetalButton tone="cobalt">Blue steel</MetalButton>
+<MetalCard tone="amethyst" />
+<MetalText tone="emerald">Emerald</MetalText>
+```
+
+Tune any tone's shader params via `TONE_PARAMS`.
 
 ## Finishes
 

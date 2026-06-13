@@ -12,7 +12,15 @@ import { mountMetal, NATIVE_TONES, type MetalEngine, type MetalMount, type Nativ
  * `argentui`. It is licensed under PolyForm Shield by Paper.
  */
 
-export type MetalTone = "silver" | "gold" | "gunmetal" | "obsidian";
+export type MetalTone =
+  | "silver"
+  | "gold"
+  | "gunmetal"
+  | "obsidian"
+  | "cobalt"
+  | "crimson"
+  | "amethyst"
+  | "emerald";
 
 type Tuned = Pick<
   LiquidMetalParams,
@@ -35,6 +43,22 @@ export const TONE_PARAMS: Record<MetalTone, Tuned> = {
   obsidian: {
     colorBack: "#000000", colorTint: "#9498a6",
     repetition: 2, softness: 0.4, shiftRed: 0.14, shiftBlue: 0.24, distortion: 0.07, contour: 0.32, angle: 92,
+  },
+  cobalt: {
+    colorBack: "#27407e", colorTint: "#cfe0ff",
+    repetition: 3, softness: 0.2, shiftRed: 0.22, shiftBlue: 0.34, distortion: 0.13, contour: 0.5, angle: 70,
+  },
+  crimson: {
+    colorBack: "#7a1820", colorTint: "#ffd0d4",
+    repetition: 3, softness: 0.2, shiftRed: 0.34, shiftBlue: 0.16, distortion: 0.13, contour: 0.5, angle: 68,
+  },
+  amethyst: {
+    colorBack: "#4a2a86", colorTint: "#e6d0ff",
+    repetition: 3, softness: 0.2, shiftRed: 0.3, shiftBlue: 0.34, distortion: 0.13, contour: 0.5, angle: 70,
+  },
+  emerald: {
+    colorBack: "#155e42", colorTint: "#c8ffdf",
+    repetition: 3, softness: 0.2, shiftRed: 0.24, shiftBlue: 0.28, distortion: 0.12, contour: 0.5, angle: 74,
   },
 };
 
