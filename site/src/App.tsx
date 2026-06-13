@@ -61,7 +61,7 @@ export function App() {
     <>
       {/* Header */}
       <header className="nav">
-        <Metal as="nav" tone="silver" radius={18} variant="border" borderWidth={3} finish="rim" speed={0.7} halo sheen className="nav-metal">
+        <Metal as="nav" tone="silver" radius={18} variant="fill" finish="button" speed={0.35} metalScale={2.2} halo sheen className="nav-metal">
           <div className="nav-inner">
             <span className="brand">
               <img className="brand-mark" src={MARK} alt="" />
@@ -84,13 +84,13 @@ export function App() {
       <div className="wrap">
         {/* Hero */}
         <div className="hero">
-          <h1 style={{ fontSize: heroPx }}>
-            Liquid{" "}
+          <h1 className="hero-h1" style={{ fontSize: heroPx }}>
             <MetalText shader tone="silver" fontSize={heroPx} fontWeight={760} className="hero-metal">
-              metal
+              Liquid metal
             </MetalText>
-            <br />
-            for React
+            <MetalText shader tone="silver" fontSize={heroPx} fontWeight={760} className="hero-metal">
+              for React
+            </MetalText>
           </h1>
           <p className="lede">
             Flowing chrome, gold, and gunmetal surfaces that ripple like mercury — real liquid
