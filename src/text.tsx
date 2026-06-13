@@ -13,9 +13,10 @@ export interface MetalTextProps extends React.HTMLAttributes<HTMLElement> {
   shimmer?: boolean;
   /**
    * Pour the real liquid-metal shader into the glyphs — flowing bands, liquid
-   * edges, chromatic fringe. Costs a WebGL canvas; the CSS gradient renders as
-   * a placeholder until the shader is ready, and stands in wherever WebGL
-   * isn't. Children must be a plain string in this mode.
+   * edges, chromatic fringe. On by default (one WebGL canvas; the CSS chrome
+   * gradient renders as a placeholder until the shader is ready, and stands in
+   * wherever WebGL isn't). Set `shader={false}` for the pure-CSS gradient.
+   * Shader mode requires a plain string child; element children fall back to CSS.
    */
   shader?: boolean;
   /**
@@ -229,18 +230,18 @@ function ShaderText({
 }
 
 /**
- * Metal type. By default a chrome gradient clipped to the glyphs with a flowing
- * shimmer — pure CSS, use it freely at any scale. Pass `shader` to pour the
- * real liquid-metal shader into the letterforms — `variant="fill"` floods the
- * glyphs; `variant="outline"` runs the metal around their edges over a dark or
- * gradient interior.
+ * Metal type. By default the real liquid-metal shader is poured into the glyphs
+ * — `variant="fill"` floods them, `variant="outline"` runs the metal around
+ * their edges over a dark or gradient interior. The CSS chrome gradient stands
+ * in until the shader loads. Set `shader={false}` for the pure-CSS gradient
+ * (free at any scale); element children also fall back to it.
  */
 export const MetalText = forwardRef<HTMLElement, MetalTextProps>(function MetalText(
   {
     as,
     tone = "silver",
     shimmer = true,
-    shader = false,
+    shader = true,
     variant = "fill",
     fill = "#101114",
     fillGradient,
@@ -256,7 +257,7 @@ export const MetalText = forwardRef<HTMLElement, MetalTextProps>(function MetalT
   },
   ref,
 ) {
-  if (shader) {
+  if (shader && typeof children === "string") {
     return (
       <ShaderText
         text={String(children)}

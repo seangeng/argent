@@ -5,11 +5,8 @@ import type { MetalTone } from "./metal";
 /**
  * Liquid metal poured into an icon. Pass any SVG icon — a React element from
  * lucide-react / heroicons, a raw SVG string, or a URL — and it renders filled
- * with metal.
- *
- * By default the metal is an animated chrome gradient clipped to the icon with
- * a CSS mask: cheap, crisp at any size, no WebGL, SSR-safe. Pass `shader` for
- * the real liquid-metal shader (one WebGL canvas — best for large/hero icons).
+ * with the liquid-metal shader (one WebGL canvas, gated to the viewport like
+ * every metal surface). React icons are serialized from the DOM to a silhouette.
  */
 export interface MetalIconProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
   /** A React SVG element, e.g. `<Beaker />` (lucide) or `<BeakerIcon />` (heroicons). */
@@ -19,13 +16,9 @@ export interface MetalIconProps extends Omit<React.HTMLAttributes<HTMLSpanElemen
   /** SVG URL or data URI (alternative to `icon`). */
   src?: string;
   tone?: MetalTone;
-  /** Rendered size in px (square). Defaults to `24`. */
+  /** Rendered size in px (square). Defaults to `32`. */
   size?: number;
-  /** Animate the highlight (CSS mode). Defaults to `true`. */
-  shimmer?: boolean;
-  /** Use the real liquid-metal shader instead of the CSS gradient. */
-  shader?: boolean;
-  /** Shader animation speed (shader mode). */
+  /** Shader animation speed. */
   speed?: number;
 }
 
@@ -58,19 +51,7 @@ function useIconUri({ svg, src }: Pick<MetalIconProps, "svg" | "src">) {
   return { ref, uri, fromNode: !direct };
 }
 
-export function MetalIcon({
-  icon,
-  svg,
-  src,
-  tone = "silver",
-  size = 24,
-  shimmer = true,
-  shader = false,
-  speed = 1,
-  className,
-  style,
-  ...rest
-}: MetalIconProps) {
+export function MetalIcon({ icon, svg, src, tone = "silver", size = 32, speed = 1, className, style, ...rest }: MetalIconProps) {
   const { ref, uri, fromNode } = useIconUri({ svg, src });
   const cls = ["argent-icon-wrap", className].filter(Boolean).join(" ");
   return (
@@ -80,22 +61,7 @@ export function MetalIcon({
           {icon}
         </span>
       )}
-      {uri &&
-        (shader ? (
-          <MetalLogo src={uri} tone={tone} size={size} speed={speed} />
-        ) : (
-          <span
-            className={["argent-icon", shimmer && "argent-icon--shimmer"].filter(Boolean).join(" ")}
-            data-tone={tone}
-            aria-hidden="true"
-            style={{
-              width: size,
-              height: size,
-              WebkitMaskImage: `url("${uri}")`,
-              maskImage: `url("${uri}")`,
-            }}
-          />
-        ))}
+      {uri && <MetalLogo src={uri} tone={tone} size={size} speed={speed} />}
     </span>
   );
 }

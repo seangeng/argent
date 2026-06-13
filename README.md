@@ -56,19 +56,19 @@ A padded liquid-metal panel.
 ```
 
 ### `<MetalText>`
-Metal type. By default a chrome gradient clipped to the glyphs (pure CSS, free at any scale). Pass `shader` and the liquid metal pours into the letterforms — flowing bands, liquid edges, chromatic fringe. Or set `variant="outline"` to run the metal around the edges of each glyph over a dark or gradient interior — the border treatment, for type.
+Metal type. By default the liquid-metal shader is poured into the glyphs — flowing bands, liquid edges, chromatic fringe. Set `variant="outline"` to run the metal around the edges of each glyph over a dark or gradient interior — the border treatment, for type. The CSS chrome gradient stands in until the shader loads (and wherever WebGL is unavailable); pass `shader={false}` to use it on its own, free at any scale.
 
 ![Chrome text](https://cdn.jsdelivr.net/gh/seangeng/argent@main/assets/text.png)
 
 ```tsx
-<MetalText shader tone="silver" fontSize={64}>Quicksilver</MetalText>
+<MetalText tone="silver" fontSize={64}>Quicksilver</MetalText>
 
 // metal edges, dark gradient interior
-<MetalText shader variant="outline" fillGradient={["#23262c", "#0a0b0d"]} fontSize={64}>
+<MetalText variant="outline" fillGradient={["#23262c", "#0a0b0d"]} fontSize={64}>
   Quicksilver
 </MetalText>
 
-<MetalText tone="gold" style={{ fontSize: 64 }}>Solid gold</MetalText>  // CSS mode
+<MetalText shader={false} tone="gold" style={{ fontSize: 64 }}>Solid gold</MetalText>  // pure CSS
 ```
 
 > Shader mode renders the glyphs into an SVG silhouette, which sees system fonts only by default. To use a webfont (e.g. Google Fonts), pass `fontCss` with an `@font-face` whose `src` is a **data: URI** — it gets embedded in the silhouette and renders correctly (the [argentui.com](https://argentui.com) text lab does exactly this). The CSS gradient stands in until the shader loads, and wherever WebGL is unavailable.
@@ -83,15 +83,15 @@ Pour the metal into any mark — pass an image with a transparent background and
 ```
 
 ### `<MetalIcon>`
-Pour metal into any SVG icon — a [lucide-react](https://lucide.dev) or [Heroicons](https://heroicons.com) element, raw SVG, or a URL. By default it's a chrome gradient clipped to the icon with a CSS mask: cheap, crisp at any size, no WebGL. Pass `shader` for the real liquid metal (one canvas — best for large icons).
+Pour the liquid-metal shader into any SVG icon — a [lucide-react](https://lucide.dev) or [Heroicons](https://heroicons.com) element, raw SVG, or a URL. React icons are serialized from the DOM to a silhouette; each icon is one WebGL canvas, gated to the viewport like every metal surface.
 
 ```tsx
 import { MetalIcon } from "argentui";
 import { Sparkles } from "lucide-react";
 import { BeakerIcon } from "@heroicons/react/24/solid";
 
-<MetalIcon icon={<Sparkles />} tone="silver" size={28} />
-<MetalIcon icon={<BeakerIcon />} tone="gold" size={64} shader />
+<MetalIcon icon={<Sparkles />} tone="silver" size={32} />
+<MetalIcon icon={<BeakerIcon />} tone="gold" size={64} />
 <MetalIcon svg="<svg>…</svg>" />          {/* or raw SVG */}
 <MetalIcon src="/icon.svg" tone="gunmetal" />  {/* or a URL */}
 ```
@@ -106,8 +106,7 @@ Buttons take an `icon` prop too — it renders before the label in the label col
 |------|------|---------|
 | `icon` / `svg` / `src` | `ReactNode` / `string` / `string` | — | the icon source (pick one) |
 | `tone` | `MetalTone` | `"silver"` |
-| `size` | `number` | `24` |
-| `shader` | `boolean` | `false` (CSS mask) |
+| `size` | `number` | `32` |
 
 ### `<MetalToggle>` / `<MetalProgress>` / `<MetalBadge>`
 A mercury switch (the thumb squishes as you press it), a molten progress bar, and metal-rimmed badges.

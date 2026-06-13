@@ -284,13 +284,12 @@ const ICONS = [
 
 export function IconLab() {
   const [tone, setTone] = useState<MetalTone>("silver");
-  const [shader, setShader] = useState(false);
   return (
     <div className="playground">
       <div className="stage stage--demo" style={{ flexDirection: "column", gap: 26 }}>
         <div style={{ display: "flex", gap: 22, flexWrap: "wrap", justifyContent: "center", alignItems: "center" }}>
           {ICONS.map((i) => (
-            <MetalIcon key={i.name} icon={i.el} tone={tone} size={shader ? 40 : 34} shader={shader} aria-label={i.name} />
+            <MetalIcon key={i.name} icon={i.el} tone={tone} size={42} aria-label={i.name} />
           ))}
         </div>
         <MetalButton tone={tone} variant="fill" icon={<Sparkles />}>
@@ -299,17 +298,16 @@ export function IconLab() {
       </div>
       <div className="controls">
         <ToneSegmented value={tone} onChange={setTone} />
-        <Segmented label="render" value={shader ? "shader" : "css"} options={["css", "shader"] as const} onChange={(v) => setShader(v === "shader")} />
       </div>
       <p className="demo-note">
-        CSS mode (default) is a masked gradient — cheap and crisp at any size. Shader mode pours the
-        real liquid metal in (one canvas each; best for large icons).
+        The real liquid-metal shader, poured into each icon (one canvas each, gated to the viewport).
+        Pass a lucide-react / Heroicons element, raw SVG, or a URL.
       </p>
       <CodeBlock
         code={`import { MetalIcon, MetalButton } from "argentui";
 import { Sparkles } from "lucide-react";
 
-<MetalIcon icon={<Sparkles />} tone="${tone}" size={32}${shader ? " shader" : ""} />
+<MetalIcon icon={<Sparkles />} tone="${tone}" size={32} />
 <MetalButton icon={<Sparkles />}>Get started</MetalButton>`}
       />
     </div>
