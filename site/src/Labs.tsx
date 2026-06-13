@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Metal, MetalLogo, MetalText, type MetalEffect, type MetalTone } from "argentui";
+import { Metal, MetalButton, MetalIcon, MetalLogo, MetalText, type MetalEffect, type MetalTone } from "argentui";
+import { Bell, Heart, Settings, Sparkles, Star, Zap } from "lucide-react";
 import { CodeBlock } from "./CodeBlock";
 import { Segmented, ToneSegmented, Toggle } from "./Controls";
 
@@ -266,6 +267,51 @@ export function TextLab() {
       </div>
       <p className="demo-note">Google Fonts work too — the face is embedded into the glyph silhouette as a data URI.</p>
       <CodeBlock code={code} />
+    </div>
+  );
+}
+
+/* ── Icon lab: pour metal into any SVG icon (lucide / heroicons / raw) ──── */
+
+const ICONS = [
+  { name: "Sparkles", el: <Sparkles /> },
+  { name: "Heart", el: <Heart /> },
+  { name: "Bolt", el: <Zap /> },
+  { name: "Star", el: <Star /> },
+  { name: "Bell", el: <Bell /> },
+  { name: "Settings", el: <Settings /> },
+];
+
+export function IconLab() {
+  const [tone, setTone] = useState<MetalTone>("silver");
+  const [shader, setShader] = useState(false);
+  return (
+    <div className="playground">
+      <div className="stage stage--demo" style={{ flexDirection: "column", gap: 26 }}>
+        <div style={{ display: "flex", gap: 22, flexWrap: "wrap", justifyContent: "center", alignItems: "center" }}>
+          {ICONS.map((i) => (
+            <MetalIcon key={i.name} icon={i.el} tone={tone} size={shader ? 40 : 34} shader={shader} aria-label={i.name} />
+          ))}
+        </div>
+        <MetalButton tone={tone} variant="fill" icon={<Sparkles />}>
+          Get started
+        </MetalButton>
+      </div>
+      <div className="controls">
+        <ToneSegmented value={tone} onChange={setTone} />
+        <Segmented label="render" value={shader ? "shader" : "css"} options={["css", "shader"] as const} onChange={(v) => setShader(v === "shader")} />
+      </div>
+      <p className="demo-note">
+        CSS mode (default) is a masked gradient — cheap and crisp at any size. Shader mode pours the
+        real liquid metal in (one canvas each; best for large icons).
+      </p>
+      <CodeBlock
+        code={`import { MetalIcon, MetalButton } from "argentui";
+import { Sparkles } from "lucide-react";
+
+<MetalIcon icon={<Sparkles />} tone="${tone}" size={32}${shader ? " shader" : ""} />
+<MetalButton icon={<Sparkles />}>Get started</MetalButton>`}
+      />
     </div>
   );
 }

@@ -171,8 +171,10 @@
 .argent-btn:focus-visible { outline: 2px solid var(--argent-edge); outline-offset: 2px; }
 
 /* ── Chrome text ──────────────────────────────────────────────────────── */
-.argent-text {
+.argent-text, .argent-icon {
   --argent-text-grad: linear-gradient(135deg, #ffffff 0%, #cdd2da 22%, #7e858f 42%, #3a3e44 50%, #aab0b9 60%, #f0f2f5 80%, #ffffff 100%);
+}
+.argent-text {
   background: var(--argent-text-grad);
   background-size: 220% 220%;
   background-position: 0% 50%;
@@ -181,13 +183,13 @@
   -webkit-text-fill-color: transparent;
   color: transparent;
 }
-.argent-text[data-tone="gold"] {
+.argent-text[data-tone="gold"], .argent-icon[data-tone="gold"] {
   --argent-text-grad: linear-gradient(135deg, #fff7d6 0%, #ffdf85 20%, #e0a912 42%, #8a6a10 50%, #e8c54e 62%, #ffe9a4 82%, #fff7d6 100%);
 }
-.argent-text[data-tone="gunmetal"] {
+.argent-text[data-tone="gunmetal"], .argent-icon[data-tone="gunmetal"] {
   --argent-text-grad: linear-gradient(135deg, #c6ccd6 0%, #8a9098 22%, #3a3e46 46%, #21242a 54%, #585d66 68%, #a8aeb8 86%, #ccd2dc 100%);
 }
-.argent-text[data-tone="obsidian"] {
+.argent-text[data-tone="obsidian"], .argent-icon[data-tone="obsidian"] {
   --argent-text-grad: linear-gradient(135deg, #9a9ca8 0%, #54565e 25%, #17181c 48%, #060608 56%, #3c3e46 72%, #84868f 92%, #a8aab4 100%);
 }
 .argent-text--shimmer { animation: argent-shimmer 7s linear infinite; }
@@ -197,6 +199,27 @@
 @media (prefers-reduced-motion: reduce) {
   .argent-text--shimmer { animation: none; }
 }
+
+/* ── Metal icons (CSS-masked gradient) ───────────────────────────────── */
+.argent-icon-wrap { vertical-align: middle; line-height: 0; position: relative; }
+.argent-icon {
+  display: inline-block;
+  background: var(--argent-text-grad);
+  background-size: 220% 220%;
+  background-position: 0% 50%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+.argent-icon--shimmer { animation: argent-shimmer 7s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .argent-icon--shimmer { animation: none; } }
+
+/* button icon sits in the label, inheriting the label colour */
+.argent-btn-icon { display: inline-flex; align-items: center; }
+.argent-btn-icon svg { width: 1.05em; height: 1.05em; display: block; }
 
 /* ── Toggle (mercury switch) ──────────────────────────────────────────── */
 .argent-toggle {

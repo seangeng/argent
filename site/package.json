@@ -11,6 +11,7 @@
     "@paper-design/shaders-react": "^0.0.76",
     "@radix-ui/react-select": "^2.3.0",
     "argentui": "file:..",
+    "lucide-react": "^1.18.0",
     "prism-react-renderer": "^2.4.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

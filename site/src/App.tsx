@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Metal, MetalCard, MetalButton, MetalText, MetalToggle, MetalProgress, MetalBadge, type MetalTone } from "argentui";
 import { CodeBlock } from "./CodeBlock";
 import { MetalLab } from "./MetalLab";
-import { EffectsDemo, LogoLab, TextLab } from "./Labs";
+import { EffectsDemo, IconLab, LogoLab, TextLab } from "./Labs";
 
 function ProgressDemo() {
   const [value, setValue] = useState(12);
@@ -71,6 +71,7 @@ export function App() {
               <a href="#buttons">Buttons</a>
               <a href="#styles">Styles</a>
               <a href="#logo">Logos</a>
+              <a href="#icons">Icons</a>
               <a href="#controls">Controls</a>
               <a href="#lab">Lab</a>
               <a href="https://github.com/seangeng/argent">GitHub</a>
@@ -278,6 +279,21 @@ import "argentui/styles.css";
             get the CSS chrome gradient (zero cost, any scale — the hero headline is the CSS mode).
           </p>
           <TextLab />
+        </div>
+      </section>
+
+      {/* Icons */}
+      <section id="icons">
+        <div className="wrap">
+          <p className="eyebrow">Component</p>
+          <h2>Metal icons</h2>
+          <p>
+            Pour metal into any SVG icon — a <code style={{ fontFamily: "var(--mono)", fontSize: 14 }}>lucide-react</code> or
+            Heroicons element, raw SVG, or a URL. CSS-masked gradient by default (cheap, crisp at
+            any size); <code style={{ fontFamily: "var(--mono)", fontSize: 14 }}>shader</code> for the
+            real liquid metal. Buttons take an <code style={{ fontFamily: "var(--mono)", fontSize: 14 }}>icon</code> prop too.
+          </p>
+          <IconLab />
         </div>
       </section>
 

@@ -6,6 +6,8 @@ export { MetalText } from "./text";
 export type { MetalTextProps, MetalTextVariant } from "./text";
 export { MetalLogo } from "./logo";
 export type { MetalLogoProps } from "./logo";
+export { MetalIcon } from "./icon";
+export type { MetalIconProps } from "./icon";
 export { MetalFill, TONE_PARAMS, FINISHES, EFFECTS, useMounted, useInView, useReducedMotion } from "./metal";
 export type { MetalTone, MetalFillProps, MetalFinish, MetalEffect } from "./metal";
 export { mountMetal, NATIVE_TONES } from "./engine";

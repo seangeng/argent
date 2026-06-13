@@ -82,6 +82,33 @@ Pour the metal into any mark — pass an image with a transparent background and
 <MetalLogo src="/logo.svg" tone="silver" size={170} />
 ```
 
+### `<MetalIcon>`
+Pour metal into any SVG icon — a [lucide-react](https://lucide.dev) or [Heroicons](https://heroicons.com) element, raw SVG, or a URL. By default it's a chrome gradient clipped to the icon with a CSS mask: cheap, crisp at any size, no WebGL. Pass `shader` for the real liquid metal (one canvas — best for large icons).
+
+```tsx
+import { MetalIcon } from "argentui";
+import { Sparkles } from "lucide-react";
+import { BeakerIcon } from "@heroicons/react/24/solid";
+
+<MetalIcon icon={<Sparkles />} tone="silver" size={28} />
+<MetalIcon icon={<BeakerIcon />} tone="gold" size={64} shader />
+<MetalIcon svg="<svg>…</svg>" />          {/* or raw SVG */}
+<MetalIcon src="/icon.svg" tone="gunmetal" />  {/* or a URL */}
+```
+
+Buttons take an `icon` prop too — it renders before the label in the label colour:
+
+```tsx
+<MetalButton tone="silver" icon={<Sparkles />}>Get started</MetalButton>
+```
+
+| prop | type | default |
+|------|------|---------|
+| `icon` / `svg` / `src` | `ReactNode` / `string` / `string` | — | the icon source (pick one) |
+| `tone` | `MetalTone` | `"silver"` |
+| `size` | `number` | `24` |
+| `shader` | `boolean` | `false` (CSS mask) |
+
 ### `<MetalToggle>` / `<MetalProgress>` / `<MetalBadge>`
 A mercury switch (the thumb squishes as you press it), a molten progress bar, and metal-rimmed badges.
 

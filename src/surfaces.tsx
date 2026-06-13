@@ -157,13 +157,15 @@ export interface MetalButtonProps extends React.ButtonHTMLAttributes<HTMLButtonE
   effect?: MetalEffect;
   angle?: number;
   halo?: boolean | number;
+  /** An icon (any SVG element) rendered before the label, in the label colour. */
+  icon?: React.ReactNode;
 }
 
 const SIZE_RADIUS = { sm: 11, md: 13, lg: 15 } as const;
 
 /** A liquid-metal button — readable at rest, molten on hover, with a stamped press. */
 export const MetalButton = forwardRef<HTMLButtonElement, MetalButtonProps>(function MetalButton(
-  { tone = "silver", size = "md", variant = "border", radius, borderWidth = 1.5, revealOnHover = true, haptics = true, speed, engine, finish = "button", effect, angle, halo = false, type = "button", className, children, style, onPointerDown, ...rest },
+  { tone = "silver", size = "md", variant = "border", radius, borderWidth = 1.5, revealOnHover = true, haptics = true, speed, engine, finish = "button", effect, angle, halo = false, icon, type = "button", className, children, style, onPointerDown, ...rest },
   ref,
 ) {
   const border = variant === "border";
@@ -185,7 +187,10 @@ export const MetalButton = forwardRef<HTMLButtonElement, MetalButtonProps>(funct
       </span>
       {border && <span className="argent-core" aria-hidden="true" />}
       <span className="argent-sheen" aria-hidden="true" />
-      <span className="argent-content argent-btn-label">{children}</span>
+      <span className="argent-content argent-btn-label">
+        {icon && <span className="argent-btn-icon" aria-hidden="true">{icon}</span>}
+        {children}
+      </span>
     </button>
   );
 });
